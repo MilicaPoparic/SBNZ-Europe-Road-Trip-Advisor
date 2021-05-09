@@ -11,6 +11,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.sbnz.dto.UserDTO;
+
 @Entity
 @Table(name = "users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -48,6 +50,12 @@ public class User {
 		this.active = active;
 		this.verified = verified;
 	}
+	
+	public UserDTO toDTO() {
+		return new UserDTO(this.getId(), this.getEmail(), this.getPassword(), this.getFirstName(), this.getLastName(), this.getActive(),
+				this.getVerified());
+	}
+	
 	public Long getId() {
 		return id;
 	}

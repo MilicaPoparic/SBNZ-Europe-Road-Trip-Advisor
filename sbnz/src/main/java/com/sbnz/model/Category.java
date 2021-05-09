@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.sbnz.dto.CategoryDTO;
+
 @Entity
 public class Category {
 	@Id
@@ -22,6 +24,10 @@ public class Category {
 		super();
 		this.name = name;
 		this.active = active;
+	}
+	
+	public CategoryDTO toDTO() {
+		return new CategoryDTO(this.getId(), this.getName(), this.isActive());
 	}
 
 	public Boolean isActive() {

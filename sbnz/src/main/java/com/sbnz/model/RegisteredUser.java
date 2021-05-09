@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
+import com.sbnz.dto.RegisteredUserDTO;
+
 @Entity
 @DiscriminatorValue("registered_user")
 public class RegisteredUser extends User {
@@ -36,9 +38,25 @@ public class RegisteredUser extends User {
 		this.locationLon = locationLon;
 		this.interests = interests;
 	}
+
+	public RegisteredUser(Long id, String email, String password, String firstName, String lastName, Date dateOfBirth,
+			String profession, double locationLat, double locationLon, Boolean active, Boolean verified) {
+		super(id, email, password, firstName, lastName, active, verified);
+		this.dateOfBirth = dateOfBirth;
+		this.profession = profession;
+		this.locationLat = locationLat;
+		this.locationLon = locationLon;
+	}
+	
 	public RegisteredUser() {
 		super();
 	}
+	
+	public RegisteredUserDTO toDTO() {
+		return new RegisteredUserDTO(this.getId(), this.getFirstName(), this.getLastName(), this.getEmail(), this.getPassword(), this.getActive(),
+				this.getVerified(), this.getDateOfBirth(), this.getProfession(), this.getLocationLat(), this.getLocationLon(), this.getInterests()); 
+	}
+	
 	public Date getDateOfBirth() {
 		return dateOfBirth;
 	}

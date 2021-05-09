@@ -1,29 +1,17 @@
-package com.sbnz.model;
+package com.sbnz.dto;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.sbnz.model.Hotel;
 
-import com.sbnz.dto.HotelDTO;
-
-@Entity
-public class Hotel {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class HotelDTO {
 	private Long id;
 	
-	@Column(unique = false, nullable = false)
 	private String name;
 	
-	@Column(unique = false, nullable = false)
 	private int stars; // 1-2 low budget hotel, 3 medium, 4-5 luxury hotel
 	
-	@Column(unique = false, nullable = false)
 	private Boolean active;
 	
-	public Hotel(Long id, String name, int stars, Boolean active) {
+	public HotelDTO(Long id, String name, int stars, Boolean active) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -31,12 +19,12 @@ public class Hotel {
 		this.active = active;
 	}
 	
-	public Hotel() {
+	public HotelDTO() {
 		super();
 	}
 	
-	public HotelDTO toDTO() {
-		return new HotelDTO(this.getId(), this.getName(), this.getStars(), this.getActive());
+	public Hotel toEntity() {
+		return new Hotel(this.getId(), this.getName(), this.getStars(), this.getActive());
 	}
 	
 	public Boolean getActive() {
@@ -45,7 +33,7 @@ public class Hotel {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
