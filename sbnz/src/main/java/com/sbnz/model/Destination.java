@@ -1,5 +1,6 @@
 package com.sbnz.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -14,10 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import com.sbnz.dto.CategoryDTO;
 import com.sbnz.dto.DestinationDTO;
+import com.sbnz.dto.HotelDTO;
 
 @Entity
-public class Destination {
+public class Destination implements Comparable<Destination>{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -35,6 +41,7 @@ public class Destination {
 	private List<Category> categories;
 
 	@OneToMany(fetch = FetchType.LAZY)
+	@Fetch(value=FetchMode.SELECT)
 	@JoinColumn(name = "destination_id", nullable = true)
 	private List<Hotel> hotels;
 
@@ -57,21 +64,27 @@ public class Destination {
 	@Column(unique = false, nullable = false)
 	private Boolean active;
 
-	public Destination(Long id, String name, Double locationLat, Double locationLon, List<Category> categories,
-			List<Hotel> hotels, List<LocalFood> localFood, List<Transportation> transportation, Double score,
+	public Destination(Long id, String name, Double locationLat, Double locationLon, List<CategoryDTO> categories,
+			List<HotelDTO> hotels, List<LocalFood> localFood, List<Transportation> transportation, Double score,
 			Boolean trending, Boolean active) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.locationLat = locationLat;
 		this.locationLon = locationLon;
-		this.categories = categories;
-		this.hotels = hotels;
+		this.categories = new ArrayList<Category>();
+		this.hotels = new ArrayList<Hotel>();
 		this.localFood = localFood;
 		this.transportation = transportation;
 		this.score = score;
 		this.trending = trending;
 		this.active = active;
+		for (CategoryDTO c : categories) {
+			this.categories.add(c.toEntity());
+		}
+		for (HotelDTO h : hotels) {
+			this.hotels.add(h.toEntity());
+		}
 	}
 
 	public Destination(Long id, String name, Double locationLat, Double locationLon, List<LocalFood> localFood,
@@ -183,6 +196,11 @@ public class Destination {
 
 	public void setActive(Boolean active) {
 		this.active = active;
+	}
+	
+	@Override
+	public int compareTo(Destination o) {
+        return (int) (o.score - this.score);
 	}
 
 }

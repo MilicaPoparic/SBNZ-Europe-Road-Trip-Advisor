@@ -1,0 +1,35 @@
+//created on: May 16, 2021
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.dto.DestinationDTO;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+
+
+//declare any global variables here
+
+rule "Add points to shopping destinations based on age < 30"
+	no-loop
+	lock-on-active true
+    when
+        $destination: DestinationDTO(name == "Madrid")
+        $user: RegisteredUser(Utility.getYears(dateOfBirth) < 30)
+    then
+        System.out.println("Increased rank by 5 when age < 30 for shopping");
+		modify($destination) {
+			setScore($destination.getScore() + 5);
+		}
+
+end
+
+rule "Your Second Rule"
+    //include attributes such as "salience" here...
+    when
+        //conditions
+    then
+        //actions
+
+end

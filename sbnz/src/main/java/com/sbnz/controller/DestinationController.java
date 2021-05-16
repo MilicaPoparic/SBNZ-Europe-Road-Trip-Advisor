@@ -109,6 +109,20 @@ public class DestinationController {
 		}
 		return destinationDTOS;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/filterByUserProfile")
+	@PreAuthorize("hasRole('REGISTERED_USER')")
+	public ResponseEntity<List<DestinationDTO>> filterDestinationsByUserProfile() {
+		List<DestinationDTO> destinations = new ArrayList<DestinationDTO>();
+		try {
+			destinations = destinationService.filterByUserProfile();
+			return new ResponseEntity<>(destinations, HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 
 //	private Page<DestinationDTO> toDestinationDTOPage(Page<Destination> rates) {
 //		Page<DestinationDTO> dtoPage = rates.map(new Function<Destination, DestinationDTO>() {
