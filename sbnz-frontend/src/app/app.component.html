@@ -1,0 +1,14 @@
+<div>
+  <div class="row">
+    <div class="col">
+      <!-- <app-navbar-user *ngIf="role === 'ROLE_REGISTERED_USER'"></app-navbar-user>
+      <app-navbar-admin *ngIf="role === 'ROLE_ADMIN'"></app-navbar-admin> -->
+      <app-navbar-non-auth></app-navbar-non-auth>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <router-outlet (activate)="checkRole()"></router-outlet>
+    </div>
+  </div>
+</div>
