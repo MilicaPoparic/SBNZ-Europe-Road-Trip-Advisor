@@ -7,6 +7,8 @@ public class CategoryDTO {
 	private Long id;
 	private String name;
 	private Boolean active;
+	
+	public CategoryDTO() {}
 
 	public CategoryDTO(Long id, String name, Boolean active) {
 		super();

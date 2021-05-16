@@ -1,12 +1,16 @@
 package com.sbnz.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.sbnz.model.Authority;
 import com.sbnz.model.RegisteredUser;
+import com.sbnz.repository.AuthorityRepository;
 import com.sbnz.repository.RegisteredUserRepository;
 
 @Service
@@ -15,11 +19,11 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 	@Autowired
 	private RegisteredUserRepository repository;
 
-//	@Autowired
-//	private AuthorityRepository authorityRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public List<RegisteredUser> findAll() {
@@ -42,12 +46,17 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		ruser.setFirstName(entity.getFirstName());
 		ruser.setLastName(entity.getLastName());
 		ruser.setEmail(entity.getEmail());
-//		ruser.setPassword(passwordEncoder.encode(entity.getPassword()));
+		ruser.setDateOfBirth(entity.getDateOfBirth());
+		ruser.setInterests(entity.getInterests());
+		ruser.setLocationLat(entity.getLocationLat());
+		ruser.setLocationLon(entity.getLocationLon());
+		ruser.setProfession(entity.getProfession());
+		ruser.setPassword(passwordEncoder.encode(entity.getPassword()));
 		ruser.setActive(true);
 		ruser.setVerified(false);
-//		Set<Authority> set = new HashSet<Authority>();
-//		set.add(authorityRepository.findByRole("ROLE_REGISTERED_USER"));
-//		ruser.setAuthority(set);
+		Set<Authority> set = new HashSet<Authority>();
+		set.add(authorityRepository.findByRole("ROLE_REGISTERED_USER"));
+		ruser.setAuthority(set);
 		return repository.save(ruser);
 	}
 

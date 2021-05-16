@@ -98,4 +98,12 @@ public class RegisteredUserDTO extends UserDTO {
 		this.locationLon = locationLon;
 	}
 
+	@Override
+	public String toString() {
+		return "RegisteredUserDTO [dateOfBirth=" + dateOfBirth + ", profession=" + profession + ", locationLat="
+				+ locationLat + ", locationLon=" + locationLon + ", interests=" + interests + ", id=" + id
+				+ ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password=" + password
+				+ ", active=" + active + ", verified=" + verified + "]";
+	}
+
 }

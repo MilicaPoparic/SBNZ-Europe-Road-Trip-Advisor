@@ -92,21 +92,22 @@ public class AuthenticationController {
 
     // Endpoint za registraciju novog korisnika
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    @Transactional
+   // @Transactional
     public ResponseEntity<?> addUser(@RequestBody RegisteredUserDTO registeredUserDTO, HttpServletRequest request) throws Exception {
     	
     	RegisteredUser registeredUser;
-		Image image;
+    	
+    	System.out.println(registeredUserDTO);
 		
 		if(!this.validate(registeredUserDTO))
     		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         try {
-        	registeredUser = registeredUserDTO.toEntity();
-        	registeredUser = regUserService.create(registeredUser);
-        	
+           	registeredUser = registeredUserDTO.toEntity();
+        	registeredUser = regUserService.create(registeredUser);        	
         	eventPublisher.publishEvent(new OnAccessLinkEvent(registeredUser,
    					request.getLocale(), request.getContextPath()));
         } catch (Exception e) {
+        	e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
