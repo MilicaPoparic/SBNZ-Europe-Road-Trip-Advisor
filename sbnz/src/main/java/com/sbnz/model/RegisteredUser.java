@@ -1,5 +1,6 @@
 package com.sbnz.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 
+import com.sbnz.dto.CategoryDTO;
 import com.sbnz.dto.RegisteredUserDTO;
 
 @Entity
@@ -30,13 +32,16 @@ public class RegisteredUser extends User {
 	private List<Category> interests;
 	
 	public RegisteredUser(Long id, String email, String password, String firstName, String lastName, Date dateOfBirth,
-			String profession, double locationLat, double locationLon, List<Category> interests, Boolean active, Boolean verified) {
+			String profession, double locationLat, double locationLon, List<CategoryDTO> list, Boolean active, Boolean verified) {
 		super(id, email, password, firstName, lastName, active, verified);
 		this.dateOfBirth = dateOfBirth;
 		this.profession = profession;
 		this.locationLat = locationLat;
 		this.locationLon = locationLon;
-		this.interests = interests;
+		this.interests = new ArrayList<Category>();
+		for (CategoryDTO c : list) {
+			this.interests.add(c.toEntity());
+		}
 	}
 
 	public RegisteredUser(Long id, String email, String password, String firstName, String lastName, Date dateOfBirth,

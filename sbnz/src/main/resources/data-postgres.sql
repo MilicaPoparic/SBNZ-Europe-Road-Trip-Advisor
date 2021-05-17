@@ -104,9 +104,9 @@ insert into hotel (name, stars, active, destination_id) values ('Alexanderplatz'
 insert into hotel (name, stars, active, destination_id) values ('Adlon Hotel', 1, true, 5);
 
 ---- USER INTERESTS
+insert into users_interests (registered_user_id, interests_id) values (1, 1);
 insert into users_interests (registered_user_id, interests_id) values (1, 3);
-insert into users_interests (registered_user_id, interests_id) values (1, 5);
-insert into users_interests (registered_user_id, interests_id) values (1, 8);
+insert into users_interests (registered_user_id, interests_id) values (1, 13);
 
 insert into users_interests (registered_user_id, interests_id) values (2, 1);
 insert into users_interests (registered_user_id, interests_id) values (2, 7);

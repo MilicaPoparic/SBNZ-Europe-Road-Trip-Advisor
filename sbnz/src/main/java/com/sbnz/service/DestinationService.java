@@ -94,7 +94,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 		return destinationRepository.findByIdAndActive(id, true);
 	}
 
-	public List<DestinationDTO> filterByUserProfile() {
+	public List<Destination> filterByUserProfile() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails)principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
@@ -105,21 +105,17 @@ public class DestinationService implements ServiceInterface<Destination> {
 		KieSession kieSession = kieContainer.newKieSession("test-session");
         kieSession.insert(ru);
         
-        for (Destination destination : allDestinations) {
-        	DestinationDTO dto = destination.toDTO();
-        	resultDestinations.add(dto);
-			kieSession.insert(dto);
-		}
-//        allDestinations.forEach(kieSession::insert);
+        
+        allDestinations.forEach(kieSession::insert);
         
         logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		kieSession.dispose();
 		
-		Collections.sort(resultDestinations);
-		for (DestinationDTO destination : resultDestinations) {
+		Collections.sort(allDestinations);
+		for (Destination destination : allDestinations) {
 			System.out.println(destination.getScore());
 		}
-		return resultDestinations;
+		return allDestinations;
 	}
 
 }

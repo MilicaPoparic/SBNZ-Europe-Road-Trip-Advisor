@@ -4,32 +4,65 @@ package rules
 //list any import classes here.
 import com.sbnz.helpers.Utility;
 import com.sbnz.model.RegisteredUser;
-import com.sbnz.dto.DestinationDTO;
+import com.sbnz.model.Destination;
 import com.sbnz.model.Category;
 import com.sbnz.model.Hotel;
 
 
 //declare any global variables here
 
-rule "Add points to shopping destinations based on age < 30"
-	no-loop
+//	rule "Add points to destinations which are user interests"
+//	no-loop
+//	lock-on-active true
+//    when
+//        $user: RegisteredUser($interests: interests)
+//        $destination: Destination($categories: categories)
+//        accumulate( Category( $n: name ) from $interests; $namesI: collectList( $n ))
+//        accumulate( Category( $n: name ) from $categories; $namesC: collectList( $n ))
+//    then
+//    	System.out.println("Increased rank by 5");
+//    	if ($namesC.contains($namesI)) {
+//        	modify($destination) {
+//			setScore($destination.getScore() + 5);
+//			}
+//        }
+//        else {}
+//		
+//end
+
+rule "Add points to destinations for younger population"
+    no-loop
 	lock-on-active true
     when
-        $destination: DestinationDTO(name == "Madrid")
         $user: RegisteredUser(Utility.getYears(dateOfBirth) < 30)
+        $destination: Destination($categories: categories)
+        Number($value: intValue >= 1) from accumulate(
+        	Category($n: name, $n == "shopping" || $n == "night life" || $n == "city"  || $n == "adventure" || $n == "concerts" ) from $categories,
+        	count($n)
+        )
     then
-        System.out.println("Increased rank by 5 when age < 30 for shopping");
-		modify($destination) {
-			setScore($destination.getScore() + 5);
-		}
-
+    	System.out.println("Increased score by 5 for every interest");
+    	modify($destination) {
+			setScore($destination.getScore() + 5 * $value);
+			}
+        
 end
 
-rule "Your Second Rule"
-    //include attributes such as "salience" here...
+rule "Add points to destinations for older population"
+    no-loop
+	lock-on-active true
     when
-        //conditions
+        $user: RegisteredUser(Utility.getYears(dateOfBirth) > 50)
+        $destination: Destination($categories: categories)
+        Number($value: intValue >= 1) from accumulate(
+        	Category($n: name, $n == "museums" || $n == "history" || $n == "city"  || $n == "mountains" || $n == "spa" ) from $categories,
+        	count($n)
+        )
     then
-        //actions
-
+    	System.out.println("Increased score by 5 for every interest");
+    	modify($destination) {
+			setScore($destination.getScore() + 5 * $value);
+			}
 end
+
+

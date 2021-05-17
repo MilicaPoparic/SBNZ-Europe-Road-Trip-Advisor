@@ -113,10 +113,10 @@ public class DestinationController {
 	@RequestMapping(method = RequestMethod.GET, value="/filterByUserProfile")
 	@PreAuthorize("hasRole('REGISTERED_USER')")
 	public ResponseEntity<List<DestinationDTO>> filterDestinationsByUserProfile() {
-		List<DestinationDTO> destinations = new ArrayList<DestinationDTO>();
+		List<Destination> destinations = new ArrayList<Destination>();
 		try {
 			destinations = destinationService.filterByUserProfile();
-			return new ResponseEntity<>(destinations, HttpStatus.OK);
+			return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

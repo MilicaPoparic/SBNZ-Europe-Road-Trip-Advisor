@@ -1,5 +1,6 @@
 package com.sbnz.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class RegisteredUserDTO extends UserDTO {
 
 	private double locationLon;
 
-	private List<Category> interests;
+	private List<CategoryDTO> interests;
 
 	public RegisteredUserDTO() {
 		super();
@@ -48,7 +49,10 @@ public class RegisteredUserDTO extends UserDTO {
 		this.profession = profession;
 		this.locationLat = lat;
 		this.locationLon = lon;
-		this.interests = interests;
+		this.interests = new ArrayList<CategoryDTO>();
+		for (Category c : interests) {
+			this.interests.add(c.toDTO());
+		}
 
 	}
 
@@ -58,11 +62,11 @@ public class RegisteredUserDTO extends UserDTO {
 				this.getLocationLon(), this.getInterests(), this.getActive(), this.getVerified());
 	}
 
-	public List<Category> getInterests() {
+	public List<CategoryDTO> getInterests() {
 		return interests;
 	}
 
-	public void setInterests(List<Category> interests) {
+	public void setInterests(List<CategoryDTO> interests) {
 		this.interests = interests;
 	}
 
