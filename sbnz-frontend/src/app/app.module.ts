@@ -8,18 +8,22 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Interceptor } from './interceptors/intercept.service';
 import { NavbarNonAuthComponent } from './core/navbar-non-auth/navbar-non-auth.component';
 import { MaterialModule } from './pages/material-module';
+import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
+import { RegisterPageComponent } from './pages/auth/register-page/register-page.component';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarNonAuthComponent
+    NavbarNonAuthComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     AuthModule,
-    MaterialModule
+    MaterialModule,
+    ToastrModule.forRoot(),
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}],
   bootstrap: [AppComponent],

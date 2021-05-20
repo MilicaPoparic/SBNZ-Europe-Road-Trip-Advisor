@@ -1,66 +1,33 @@
-<div class="bg">
-    <div class="main-div">
-        <mat-card class="card">
-            <mat-card-header>
-                <div class="register-box-header">
-                    <h1 mat-dialog-title>Register</h1>
-                </div>
-              </mat-card-header>
-              <mat-card-content>
-                <form class="reactiveForm" [formGroup]="form" (ngSubmit)="addUser()" class="form">
-                    <div class="example-container">
-                    
-                    <mat-form-field appearance="fill">
-                        <mat-label>First name</mat-label>
-                        <input matInput id="firstName" formControlName="firstName" required>
-                        <mat-error *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
-                            <span *ngIf="form.controls.firstName.errors?.required">This field is mandatory.</span>
-                        </mat-error>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Last name</mat-label>
-                        <input matInput id="lastName" formControlName="lastName" required>
-                        <mat-error *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
-                            <span *ngIf="form.controls.lastName.errors?.required">This field is mandatory.</span>
-                        </mat-error>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Email</mat-label>
-                        <input matInput id="email" formControlName="email" required/>
-                        <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
-                            <span *ngIf="form.controls.email.errors?.required">This field is mandatory.</span>
-                            <span *ngIf="form.controls.email.errors?.pattern">This field is invalid.</span>
-                        </mat-error>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Password</mat-label>
-                        <input matInput id="password" placeholder="Password" [type]="hide ? 'password' : 'text'" formControlName="password" required>
-                        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        <mat-error *ngIf="form.controls.password.touched && form.controls.password.invalid">
-                            <span *ngIf="form.controls.password.errors?.required">This field is mandatory.</span>
-                        </mat-error>
-                    </mat-form-field>
-                    <br>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Repeat password</mat-label>
-                        <input matInput id="passwordRepeat" placeholder="RepeatPassword" [type]="hide ? 'password' : 'text'" formControlName="repeatPassword" required>
-                        <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        <mat-error *ngIf="(form.controls.repeatPassword.touched && form.controls.repeatPassword.invalid) || passwordError">
-                            <span *ngIf="form.controls.repeatPassword.errors?.required">This field is mandatory.</span>
-                            <span *ngIf="passwordError">Passwords aren't the same.</span>
-                        </mat-error>
-                        
-                    </mat-form-field>
-                    <br>
-                    <mat-dialog-actions align="end">
-                        <button type="submit" id="submit" mat-raised-button color="success" [disabled]="form.invalid">Sign up</button>
-                    </mat-dialog-actions>
-                    </div>
-                </form>  
-            </mat-card-content>  
-        </mat-card>
+<div class='bold-line'></div>
+<div class='container'>
+  <div class='window'>
+    <div class='overlay'></div>
+    <div class='content'>
+      <!-- <div class='welcome'>Sign up</div> -->
+      <!-- <div class='subtitle'>Sign up</div>  -->
+      <form [formGroup]="form" (ngSubmit)="addUser()">
+      <div class='input-fields'>
+        <input type='text' placeholder='Firstname' class='input-line full-width' formControlName = "firstName">
+        <small class="text-danger" id="usernameError"  *ngIf="form.controls.firstName.touched && form.controls.firstName.errors?.required">
+        This field can't be empty!</small>
+        <input type='text' placeholder='Lastname' class='input-line full-width' formControlName = "lastName">
+        <small class="text-danger" id="usernameError"  *ngIf="form.controls.lastName.touched && form.controls.lastName.errors?.required">
+        This field can't be empty!</small>
+        <input type='email' placeholder='Email' class='input-line full-width' formControlName = "email">
+        <small class="text-danger" id="usernameError"  *ngIf="form.controls.email.touched && form.controls.email.errors?.required">
+        This field can't be empty!</small>           
+        <input type='password' placeholder='Password' class='input-line full-width' formControlName = "password">
+        <small class="text-danger" id="passwordError" *ngIf="form.controls.password.touched && form.controls.password.errors?.required">
+           This field can't be empty!</small>
+        <input type='password' placeholder='Repeat password' class='input-line full-width' formControlName = "repeatPassword">
+        <small class="text-danger" id="passwordError" *ngIf="form.controls.repeatPassword.touched && form.controls.repeatPassword.errors?.required">
+            This field can't be empty!</small>
+       </div>
+       <!-- TODO: dodati polja za lokaciju, datum rodjenja i profesiju i select za biranje interesovanja -->
+
+       </form>
+      <div class='spacing'>Already have an account? <span class='highlight'><a href="/">Sign in</a></span></div>
+      <div><button type="submit" class='ghost-round full-width' [disabled]="form.invalid">Create account</button></div>
     </div>
+  </div>
 </div>

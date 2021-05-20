@@ -10,7 +10,7 @@ export const routes :Routes = [
 	// 	component: HomePageComponent
 	// },
 	{
-		path: 'login',
+		path: '',
 		component: LoginPageComponent,
 		canActivate: [LoginGuard]
 	},

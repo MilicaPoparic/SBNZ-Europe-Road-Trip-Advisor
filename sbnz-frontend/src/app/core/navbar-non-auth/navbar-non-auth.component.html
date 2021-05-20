@@ -1,12 +1,12 @@
 <mat-toolbar class="flexSpaceBetween">
 	<div>
 		<a  id="home" [routerLink]="['/']">
-			<mat-icon class="material-icons"  inline="true" >home</mat-icon>
+			<button mat-button>Road Trip Advisor</button>
+			<!-- <mat-icon class="material-icons"  inline="true" >Road Trip Advisor</mat-icon> -->
 		</a>
 	</div>
 	<span>
-		<button id="news" mat-button [routerLink]="['/posts']"> News </button>
-		<button id="login" mat-button [routerLink]="['/login']" > Sign in </button>
+		<button id="login" mat-button [routerLink]="['/']" > Sign in </button>
 		<button id="register" mat-button [routerLink]="['/register']" > Sign up </button>
 	</span>
 </mat-toolbar>

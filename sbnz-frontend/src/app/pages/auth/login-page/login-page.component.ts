@@ -33,12 +33,11 @@ export class LoginPageComponent implements OnInit {
 		const auth: any = {};
 		auth.username = this.form.value['username'];
     	auth.password = this.form.value['password'];
-
 		this.authenticationService.login(auth).subscribe(      
 			result => {
 				this.toastr.success('Successful login!');
 				localStorage.setItem('user', JSON.stringify(result));
-				this.router.navigate(['/']);
+				this.router.navigate(['/register']);
 			},
 			error => {
 				console.log(error);
