@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { Destination } from 'src/app/core/model/Destination';
 import { DestinationService } from 'src/app/core/services/destination/destination.service';
+import { PersonalizeSearchComponent } from '../personalize-search/personalize-search.component';
 
 @Component({
   selector: 'app-for-you-list',
@@ -14,7 +16,8 @@ export class ForYouListComponent implements OnInit {
   
 
   constructor(private destinationService: DestinationService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -44,6 +47,14 @@ export class ForYouListComponent implements OnInit {
       }
     );
 
+  }
+
+  onButtonClicked(){
+    console.log('titu')
+    const dialogRef = this.dialog.open(PersonalizeSearchComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 
 }

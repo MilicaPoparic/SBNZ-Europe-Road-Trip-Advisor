@@ -1,0 +1,65 @@
+<form class="reactiveForm" [formGroup]="form" class="form">
+    <div class="example-container">
+        <mat-form-field appearance="fill">
+            <mat-label>Local food</mat-label>
+            <mat-select (selectionChange)="changeFood($event)" placeholder="Select" multiple>
+                <mat-option *ngFor="let f of localFoodArray" [value]="f">{{f}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Transportation</mat-label>
+            <mat-select (valueChange)="changeTransportation($event)" placeholder="Select">
+                <mat-option *ngFor="let f of transportationArray" [value]="f">{{f}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Budget</mat-label>
+            <mat-select (valueChange)="changeBudget($event)" placeholder="Select">
+                <mat-option *ngFor="let f of budgetArray" [value]="f">{{f}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Accommodation</mat-label>
+            <mat-select (valueChange)="changeAccommodation($event)" placeholder="Select">
+                <mat-option *ngFor="let f of accommodationArray" [value]="f">{{f}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-slide-toggle (change)="toggle($event)">Children</mat-slide-toggle>
+        <br>
+
+        
+    <!-- <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input matInput formControlName="firstName" id="firstName" required>
+        <mat-error *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+            <span *ngIf="form.controls.firstName.errors?.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+        <mat-label>Last name</mat-label>
+        <input matInput formControlName="lastName" id="lastName" required>
+        <mat-error *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+            <span *ngIf="form.controls.lastName.errors?.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="username" id="email" required/>
+        <mat-error *ngIf="form.controls.username.touched && form.controls.username.invalid">
+            <span *ngIf="form.controls.username.errors?.required">This field is mandatory.</span>
+            <span *ngIf="form.controls.username.errors?.pattern">This field is invalid.</span>
+        </mat-error>
+    </mat-form-field> -->
+    <br>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button type="submit" mat-raised-button color="success" id="submit" [disabled]="form.invalid" (click)="submit()">Plan my trip</button>
+    </mat-dialog-actions>
+    </div>
+</form>  

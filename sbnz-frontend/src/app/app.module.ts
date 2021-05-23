@@ -13,6 +13,7 @@ import { RegisterPageComponent } from './pages/auth/register-page/register-page.
 import { ToastrModule } from 'ngx-toastr';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ForYouListComponent } from './pages/for-you-list/for-you-list.component';
+import { PersonalizeSearchComponent } from './pages/personalize-search/personalize-search.component';
 
 
 @NgModule({
@@ -21,6 +22,7 @@ import { ForYouListComponent } from './pages/for-you-list/for-you-list.component
     NavbarNonAuthComponent,
     HomePageComponent,
     ForYouListComponent,
+    PersonalizeSearchComponent,
   ],
   imports: [
     BrowserModule,
