@@ -1,0 +1,28 @@
+<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+    <div class="controls-top">
+        <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
+        <a class="btn-floating" href="#multi-item-example" data-slide="next"><i
+            class="fas fa-chevron-right"></i></a>
+      </div>
+      <ol class="carousel-indicators">
+        <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+        <li data-target="#multi-item-example" data-slide-to="1"></li> 
+      </ol>
+    <div class="carousel-inner" role="listbox">
+      <div class="carousel-item active"  >
+        <div class="col-md-3" *ngFor="let i of destinations">
+         <div class="card mb-2">
+            <!-- <img class="card-img-top"
+             *ngIf="i.base64image" [src]="i.base64image" alt="Card image cap"> -->
+            <div class="card-body">
+              <h4 class="card-title">{{i.name}}</h4>
+              <p class="card-text">{{i.score}}</p>
+              <a id = "goToPage{{i.id}}" mat-button href="/" matTooltip="Open to see details" inline="true">
+                <mat-icon>open_in_new</mat-icon>
+              </a>
+            </div>
+          </div>
+        </div>        
+      </div>
+    </div> 
+  </div>

@@ -11,12 +11,16 @@ import { MaterialModule } from './pages/material-module';
 import { LoginPageComponent } from './pages/auth/login-page/login-page.component';
 import { RegisterPageComponent } from './pages/auth/register-page/register-page.component';
 import { ToastrModule } from 'ngx-toastr';
+import { HomePageComponent } from './pages/home-page/home-page.component';
+import { ForYouListComponent } from './pages/for-you-list/for-you-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarNonAuthComponent,
+    HomePageComponent,
+    ForYouListComponent,
   ],
   imports: [
     BrowserModule,
