@@ -2,6 +2,7 @@ package com.sbnz.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sbnz.dto.DestinationDTO;
+import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.Destination;
 import com.sbnz.service.DestinationService;
 
@@ -116,6 +118,20 @@ public class DestinationController {
 		List<Destination> destinations = new ArrayList<Destination>();
 		try {
 			destinations = destinationService.filterByUserProfile();
+			return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+		} catch(Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value="/filterBySearchParams")
+	@PreAuthorize("hasRole('REGISTERED_USER')")
+	public ResponseEntity<List<DestinationDTO>> filterDestinationsBySearch(@RequestBody SearchDTO searchDTO) {
+		List<Destination> destinations = new ArrayList<Destination>();
+		try {
+			destinations = destinationService.filterBySearchParams(searchDTO);
 			return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
 		} catch(Exception e) {
 			e.printStackTrace();

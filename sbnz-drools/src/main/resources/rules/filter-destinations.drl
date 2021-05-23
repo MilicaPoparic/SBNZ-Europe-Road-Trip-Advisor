@@ -7,28 +7,51 @@ import com.sbnz.model.RegisteredUser;
 import com.sbnz.model.Destination;
 import com.sbnz.model.Category;
 import com.sbnz.model.Hotel;
-
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
 
 //declare any global variables here
 
-//	rule "Add points to destinations which are user interests"
-//	no-loop
-//	lock-on-active true
-//    when
-//        $user: RegisteredUser($interests: interests)
-//        $destination: Destination($categories: categories)
-//        accumulate( Category( $n: name ) from $interests; $namesI: collectList( $n ))
-//        accumulate( Category( $n: name ) from $categories; $namesC: collectList( $n ))
-//    then
-//    	System.out.println("Increased rank by 5");
-//    	if ($namesC.contains($namesI)) {
-//        	modify($destination) {
-//			setScore($destination.getScore() + 5);
-//			}
-//        }
-//        else {}
-//		
-//end
+rule "Add points to destinations with selected trasnportation"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation)
+        $destination: Destination(transportation contains $transport)
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5);	
+        }		
+end
+
+rule "Add points to destinations which are user interests"
+	no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser($interests: interests)
+        $destination: Destination($categories: categories)
+        accumulate( Category( $c: this , this memberOf $categories) from $interests,
+        			 $cats: collectList( $c ))
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5*$cats.size());	
+        }		
+end
+
+rule "Add points to destinations with selected local food"
+	no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($food: localFood)
+        $destination: Destination($destinationFood: localFood)
+        accumulate( LocalFood( $f: this , this memberOf $destinationFood) from $food,
+        			 $foodList: collectList( $f ))
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5*$foodList.size());	
+        }		
+end
 
 rule "Add points to destinations for younger population"
     no-loop
@@ -41,11 +64,9 @@ rule "Add points to destinations for younger population"
         	count($n)
         )
     then
-    	System.out.println("Increased score by 5 for every interest");
     	modify($destination) {
 			setScore($destination.getScore() + 5 * $value);
 			}
-        
 end
 
 rule "Add points to destinations for older population"
@@ -59,7 +80,6 @@ rule "Add points to destinations for older population"
         	count($n)
         )
     then
-    	System.out.println("Increased score by 5 for every interest");
     	modify($destination) {
 			setScore($destination.getScore() + 5 * $value);
 			}

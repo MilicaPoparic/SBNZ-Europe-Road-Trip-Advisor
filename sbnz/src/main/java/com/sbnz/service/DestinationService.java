@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.sbnz.dto.DestinationDTO;
+import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.Destination;
 import com.sbnz.model.RegisteredUser;
 import com.sbnz.repository.DestinationRepository;
@@ -25,15 +26,14 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	@Autowired
 	private DestinationRepository destinationRepository;
-	
+
 	@Autowired
 	private RegisteredUserRepository registeredUserRepository;
 
 	@Autowired
 	private KieContainer kieContainer;
 
-    private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
 
 	@Override
 	public List<Destination> findAll() {
@@ -96,25 +96,43 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	public List<Destination> filterByUserProfile() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String username = ((UserDetails)principal).getUsername();
+		String username = ((UserDetails) principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
 		List<DestinationDTO> resultDestinations = new ArrayList<DestinationDTO>();
-		
+
 		KieSession kieSession = kieContainer.newKieSession("test-session");
-        kieSession.insert(ru);
-        
-        
-        allDestinations.forEach(kieSession::insert);
-        
-        logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		kieSession.insert(ru);
+
+		allDestinations.forEach(kieSession::insert);
+
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		kieSession.dispose();
-		
+
 		Collections.sort(allDestinations);
-		for (Destination destination : allDestinations) {
-			System.out.println(destination.getScore());
-		}
+		return allDestinations;
+	}
+
+	public List<Destination> filterBySearchParams(SearchDTO searchDTO) {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username = ((UserDetails) principal).getUsername();
+		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
+		System.out.println(ru.getEmail());
+		List<Destination> allDestinations = findAll();
+		List<DestinationDTO> resultDestinations = new ArrayList<DestinationDTO>();
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.insert(ru);
+
+		kieSession.insert(searchDTO);
+
+		allDestinations.forEach(kieSession::insert);
+
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		kieSession.dispose();
+
+		Collections.sort(allDestinations);
 		return allDestinations;
 	}
 
