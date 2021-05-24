@@ -4,6 +4,7 @@ import { Observable, Subject } from 'rxjs';
 import { User } from '../../model/User';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { SearchParams } from '../../model/SearchParams';
 
 
 @Injectable({
@@ -30,5 +31,9 @@ export class DestinationService {
 			params: new HttpParams()
 		};
 		return this.http.get(`${environment.baseUrl}/${environment.destination}/filterByUserProfile`, queryParams).pipe(map(res => res));
+    }
+
+	getDestinationBySearchParams(params: SearchParams):Observable<any>{
+        return this.http.post(`${environment.baseUrl}/${environment.destination}/filterBySearchParams`, params, {headers: this.headers}).pipe(map(res=>res));
     }
 }

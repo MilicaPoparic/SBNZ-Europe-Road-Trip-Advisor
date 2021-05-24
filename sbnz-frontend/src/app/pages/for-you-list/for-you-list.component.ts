@@ -50,10 +50,9 @@ export class ForYouListComponent implements OnInit {
   }
 
   onButtonClicked(){
-    console.log('titu')
     const dialogRef = this.dialog.open(PersonalizeSearchComponent);
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      this.destinations = result.data;
     });
   }
 

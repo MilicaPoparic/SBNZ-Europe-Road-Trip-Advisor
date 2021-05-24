@@ -28,34 +28,32 @@
             </mat-select>
         </mat-form-field>
         <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Choose a start date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="startDate" [min]="todayDate">
+            <mat-datepicker-toggle matSuffix [for]="picker" id="datePickerToggleBtn" ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Choose a end date</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="endDate" [min]="todayDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1" id="datePickerToggleBtn" ></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Max distance</mat-label>
+            <input matInput formControlName="maxDistance" id="maxDistance" type="number">
+            </mat-form-field>
+        <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Number of people</mat-label>
+            <input matInput formControlName="numberOfPeople" id="numberOfPeople" type="number">
+            </mat-form-field>
+        <br>
         <mat-slide-toggle (change)="toggle($event)">Children</mat-slide-toggle>
         <br>
-
-        
-    <!-- <mat-form-field appearance="fill">
-        <mat-label>First name</mat-label>
-        <input matInput formControlName="firstName" id="firstName" required>
-        <mat-error *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
-            <span *ngIf="form.controls.firstName.errors?.required">This field is mandatory.</span>
-        </mat-error>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-        <mat-label>Last name</mat-label>
-        <input matInput formControlName="lastName" id="lastName" required>
-        <mat-error *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
-            <span *ngIf="form.controls.lastName.errors?.required">This field is mandatory.</span>
-        </mat-error>
-    </mat-form-field>
-    <br>
-    <mat-form-field appearance="fill">
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="username" id="email" required/>
-        <mat-error *ngIf="form.controls.username.touched && form.controls.username.invalid">
-            <span *ngIf="form.controls.username.errors?.required">This field is mandatory.</span>
-            <span *ngIf="form.controls.username.errors?.pattern">This field is invalid.</span>
-        </mat-error>
-    </mat-form-field> -->
     <br>
     <mat-dialog-actions align="end">
         <button mat-raised-button (click)="cancel()">Cancel</button>
