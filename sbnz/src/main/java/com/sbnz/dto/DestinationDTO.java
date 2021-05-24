@@ -32,18 +32,20 @@ public class DestinationDTO implements Comparable<DestinationDTO> {
 
 	private List<HotelDTO> hotels;
 
+	private List<String> images;
+
 	public DestinationDTO() {
 		super();
 	}
 
 	public DestinationDTO(Long id, String name, Double locationLat, Double locationLon, List<Category> categories,
 			List<Hotel> hotels, List<LocalFood> localFood, List<Transportation> transportation, Double score,
-			Boolean trending, Boolean active) {
+			Boolean trending, Boolean active, List<String> images) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.locationLat = locationLat;
-		this.locationLon = locationLon;	
+		this.locationLon = locationLon;
 		this.localFood = new ArrayList<LocalFood>();
 		this.transportation = new ArrayList<Transportation>();
 		this.score = score;
@@ -51,25 +53,27 @@ public class DestinationDTO implements Comparable<DestinationDTO> {
 		this.active = active;
 		this.categories = new ArrayList<CategoryDTO>();
 		this.hotels = new ArrayList<HotelDTO>();
+		this.images = images;
 		for (Category c : categories) {
 			this.categories.add(c.toDTO());
 		}
 		for (Hotel h : hotels) {
 			this.hotels.add(h.toDTO());
 		}
-		
+
 		for (LocalFood lf : localFood) {
 			this.localFood.add(lf);
 		}
-		
+
 		for (Transportation t : transportation) {
 			this.transportation.add(t);
 		}
 	}
 
 	public Destination toEntity() {
-		return new Destination(this.getId(), this.getName(), this.getLocationLat(), this.getLocationLon(),this.getCategories(), this.getHotels(),
-				this.getLocalFood(), this.getTransportation(), this.getScore(), this.getTrending(), this.getActive());
+		return new Destination(this.getId(), this.getName(), this.getLocationLat(), this.getLocationLon(),
+				this.getCategories(), this.getHotels(), this.getLocalFood(), this.getTransportation(), this.getScore(),
+				this.getTrending(), this.getActive(), this.images);
 	}
 
 	public Long getId() {
@@ -159,11 +163,18 @@ public class DestinationDTO implements Comparable<DestinationDTO> {
 	public void setHotels(List<HotelDTO> hotels) {
 		this.hotels = hotels;
 	}
-	
+
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+
 	@Override
 	public int compareTo(DestinationDTO o) {
-        return (int) (o.score - this.score);
+		return (int) (o.score - this.score);
 	}
-	
 
 }

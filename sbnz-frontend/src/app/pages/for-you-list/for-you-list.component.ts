@@ -25,24 +25,11 @@ export class ForYouListComponent implements OnInit {
     this.destinationService.getDestination().subscribe(
             res => {
         this.destinations = res.body as Destination[];
-        // this.culturalOffers.forEach(element => {
-        // this.images = element.imageDTO as Img[];
-        // if (this.images.length === 0){
-        //   return;
-        // }
-        // this.imageService.getImage(this.images[0]?.id).subscribe(
-        //   response => {
-        //     const base64String = btoa(String.fromCharCode(...new Uint8Array(response.body)));
-        //     const objectURL = 'data:image/jpg;base64,' + base64String;
-        //     this.base64image = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-        // //     element.base64image = this.base64image;
-
-        //   }, error => {
-        //     console.log(error.error);
-
-        //   });
-      //  });
-            }, error => {
+        this.destinations.forEach(element => {
+          let imagess = element.images as string[];
+          element.image = imagess[0];
+        });
+      }, error => {
         console.log(error.error);
       }
     );
@@ -53,6 +40,10 @@ export class ForYouListComponent implements OnInit {
     const dialogRef = this.dialog.open(PersonalizeSearchComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.destinations = result.data;
+      this.destinations.forEach(element => {
+        let imagess = element.images as string[];
+        element.image = imagess[0];
+      });
     });
   }
 

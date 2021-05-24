@@ -12,4 +12,6 @@ export interface Destination{
     trending?: boolean;
     categories?: Category[];
     hotels?: Hotel[];
+    images?: string[];
+    image?: string;
 }

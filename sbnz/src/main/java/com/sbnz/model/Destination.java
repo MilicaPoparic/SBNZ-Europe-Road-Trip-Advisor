@@ -23,7 +23,7 @@ import com.sbnz.dto.DestinationDTO;
 import com.sbnz.dto.HotelDTO;
 
 @Entity
-public class Destination implements Comparable<Destination>{
+public class Destination implements Comparable<Destination> {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -37,11 +37,14 @@ public class Destination implements Comparable<Destination>{
 	@Column(unique = false, nullable = false)
 	private Double locationLon;
 
+	@ElementCollection
+	private List<String> images;
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Category> categories;
 
 	@OneToMany(fetch = FetchType.LAZY)
-	@Fetch(value=FetchMode.SELECT)
+	@Fetch(value = FetchMode.SELECT)
 	@JoinColumn(name = "destination_id", nullable = true)
 	private List<Hotel> hotels;
 
@@ -66,7 +69,7 @@ public class Destination implements Comparable<Destination>{
 
 	public Destination(Long id, String name, Double locationLat, Double locationLon, List<CategoryDTO> categories,
 			List<HotelDTO> hotels, List<LocalFood> localFood, List<Transportation> transportation, Double score,
-			Boolean trending, Boolean active) {
+			Boolean trending, Boolean active, List<String> images) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -79,6 +82,7 @@ public class Destination implements Comparable<Destination>{
 		this.score = score;
 		this.trending = trending;
 		this.active = active;
+		this.images = images;
 		for (CategoryDTO c : categories) {
 			this.categories.add(c.toEntity());
 		}
@@ -88,7 +92,7 @@ public class Destination implements Comparable<Destination>{
 	}
 
 	public Destination(Long id, String name, Double locationLat, Double locationLon, List<LocalFood> localFood,
-			List<Transportation> transportation, Double score, Boolean trending, Boolean active) {
+			List<Transportation> transportation, Double score, Boolean trending, Boolean active, List<String> images) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -99,6 +103,7 @@ public class Destination implements Comparable<Destination>{
 		this.score = score;
 		this.trending = trending;
 		this.active = active;
+		this.images = images;
 	}
 
 	public Destination() {
@@ -106,8 +111,9 @@ public class Destination implements Comparable<Destination>{
 	}
 
 	public DestinationDTO toDTO() {
-		return new DestinationDTO(this.getId(), this.getName(), this.getLocationLat(), this.getLocationLon(), this.getCategories(), this.getHotels(),
-				this.getLocalFood(), this.getTransportation(), this.getScore(), this.getTrending(), this.getActive());
+		return new DestinationDTO(this.getId(), this.getName(), this.getLocationLat(), this.getLocationLon(),
+				this.getCategories(), this.getHotels(), this.getLocalFood(), this.getTransportation(), this.getScore(),
+				this.getTrending(), this.getActive(), this.images);
 	}
 
 	public Long getId() {
@@ -197,10 +203,18 @@ public class Destination implements Comparable<Destination>{
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
+
+	public List<String> getImages() {
+		return images;
+	}
+
+	public void setImages(List<String> images) {
+		this.images = images;
+	}
+
 	@Override
 	public int compareTo(Destination o) {
-        return (int) (o.score - this.score);
+		return (int) (o.score - this.score);
 	}
 
 }

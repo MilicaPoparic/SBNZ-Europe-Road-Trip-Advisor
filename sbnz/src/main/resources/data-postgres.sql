@@ -37,6 +37,12 @@ values (41.41, 12.70, 'Rome', 0, false, true);
 insert into destination (location_lat, location_lon, name, score, trending, active)
 values (52.52, 13.40, 'Berlin', 0, false, true);
 
+insert into destination_images (destination_id, images) values (1, 'https://www.olympic.rs/wp-content/uploads/formidable/2/madridnaslovnafotografija.jpg');
+insert into destination_images (destination_id, images) values (2, 'https://i1.wp.com/www.centarzaafirmacijuirazvoj.org/wp-content/uploads/2020/04/76709-640x360-houses-of-parliament-and-london-eye-on-thames-from-above-640.jpg?resize=640%2C300&ssl=1');
+insert into destination_images (destination_id, images) values (3, 'https://media.tacdn.com/media/attractions-splice-spp-674x446/07/03/1c/9c.jpg');
+insert into destination_images (destination_id, images) values (4, 'https://lordtravel.rs/wp-content/uploads/2019/09/rome.jpg');
+insert into destination_images (destination_id, images) values (5, 'https://cdn.flixbus.de/city_description_images/berlin-culture-history.jpg');
+
 insert into destination_categories (destination_id, categories_id) values (1, 1);
 insert into destination_categories (destination_id, categories_id) values (1, 3);
 insert into destination_categories (destination_id, categories_id) values (1, 13);
