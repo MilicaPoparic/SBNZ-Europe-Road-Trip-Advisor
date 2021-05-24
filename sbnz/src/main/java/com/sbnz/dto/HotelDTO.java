@@ -11,12 +11,15 @@ public class HotelDTO {
 	
 	private Boolean active;
 	
-	public HotelDTO(Long id, String name, int stars, Boolean active) {
+	private Boolean childrenDiscount;
+	
+	public HotelDTO(Long id, String name, int stars, Boolean active, Boolean childrenDiscount) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.stars = stars;
 		this.active = active;
+		this.childrenDiscount = childrenDiscount;
 	}
 	
 	public HotelDTO() {
@@ -24,7 +27,7 @@ public class HotelDTO {
 	}
 	
 	public Hotel toEntity() {
-		return new Hotel(this.getId(), this.getName(), this.getStars(), this.getActive());
+		return new Hotel(this.getId(), this.getName(), this.getStars(), this.getActive(), this.getChildrenDiscount());
 	}
 	
 	public Boolean getActive() {
@@ -51,5 +54,13 @@ public class HotelDTO {
 	}
 	public void setStars(int stars) {
 		this.stars = stars;
+	}
+
+	public Boolean getChildrenDiscount() {
+		return childrenDiscount;
+	}
+
+	public void setChildrenDiscount(Boolean childrenDiscount) {
+		this.childrenDiscount = childrenDiscount;
 	}
 }

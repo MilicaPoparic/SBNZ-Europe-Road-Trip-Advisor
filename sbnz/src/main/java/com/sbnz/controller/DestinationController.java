@@ -126,7 +126,7 @@ public class DestinationController {
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value="/filterBySearchParams")
+	@RequestMapping(method = RequestMethod.POST, value="/filterBySearchParams")
 	@PreAuthorize("hasRole('REGISTERED_USER')")
 	public ResponseEntity<List<DestinationDTO>> filterDestinationsBySearch(@RequestBody SearchDTO searchDTO) {
 		List<Destination> destinations = new ArrayList<Destination>();

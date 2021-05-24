@@ -23,12 +23,16 @@ public class Hotel {
 	@Column(unique = false, nullable = false)
 	private Boolean active;
 	
-	public Hotel(Long id, String name, int stars, Boolean active) {
+	@Column(unique = false, nullable = false)
+	private Boolean childrenDiscount;
+	
+	public Hotel(Long id, String name, int stars, Boolean active, Boolean childrenDiscount) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.stars = stars;
 		this.active = active;
+		this.childrenDiscount = childrenDiscount;
 	}
 	
 	public Hotel() {
@@ -36,7 +40,7 @@ public class Hotel {
 	}
 	
 	public HotelDTO toDTO() {
-		return new HotelDTO(this.getId(), this.getName(), this.getStars(), this.getActive());
+		return new HotelDTO(this.getId(), this.getName(), this.getStars(), this.getActive(), this.getChildrenDiscount());
 	}
 	
 	public Boolean getActive() {
@@ -63,5 +67,13 @@ public class Hotel {
 	}
 	public void setStars(int stars) {
 		this.stars = stars;
+	}
+
+	public Boolean getChildrenDiscount() {
+		return childrenDiscount;
+	}
+
+	public void setChildrenDiscount(Boolean childrenDiscount) {
+		this.childrenDiscount = childrenDiscount;
 	}
 }

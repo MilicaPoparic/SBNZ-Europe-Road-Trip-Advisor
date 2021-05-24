@@ -12,8 +12,107 @@ import com.sbnz.model.LocalFood;
 import com.sbnz.model.Transportation;
 
 //declare any global variables here
+//distance(double lat1, double lon1, double lat2, double lon2)
+// TODO pravilo za max distance
 
-rule "Add points to destinations with selected trasnportation"
+rule "Add points to destinations with high budget"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "high")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLon)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+
+    then
+    	if($estimatedBudget > 2500) {
+			modify($destination) {
+				setScore($destination.getScore() + 10);	
+	        }
+	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - high, estimated budget: "+$estimatedBudget +"e");	
+       }
+end
+
+rule "Add points to destinations with medium budget"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "medium")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLat)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+        
+	
+    then
+    	if($estimatedBudget < 2500 && $estimatedBudget > 1000){
+			modify($destination) {
+				setScore($destination.getScore() + 10);	
+	        }
+	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - medium, estimated budget: "+$estimatedBudget +"e");	
+       }
+end
+
+
+rule "Add points to destinations with low budget"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "low")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLon)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+    
+    then
+    	if($estimatedBudget < 1000) {
+			modify($destination) {
+				setScore($destination.getScore() + 10);	
+	        }
+	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - low, estimated budget: "+$estimatedBudget +"e");	
+       }
+end
+
+rule "Add points to destinations with wanted accommodation level"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($accommodation: accommodation)
+        $destination: Destination($hotels : hotels)
+        accumulate( Hotel( $h: this , stars == $accommodation) from $hotels,
+        			 $hotelsWithAccommodation: collectList( $h ))
+        
+    then	
+		modify($destination) {
+			setScore($destination.getScore() + 5*$hotelsWithAccommodation.size());	
+        }
+       System.out.println(""+5*$hotelsWithAccommodation.size()+" points goes to "+$destination.getName()+" for having hotels with "+$accommodation+" stars");	
+end
+
+rule "Add points to destinations with hotels which have children discount if user has children"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($children: children)
+        $destination: Destination($hotels : hotels)
+        accumulate( Hotel( $h: this , childrenDiscount == $children) from $hotels,
+        			 $hotelsWithDiscount: collectList( $h ))
+        
+    then
+    	if ($children == true){   	
+			modify($destination) {
+				setScore($destination.getScore() + 5*$hotelsWithDiscount.size());	
+	        }
+	       System.out.println(""+5*$hotelsWithDiscount.size()+" points goes to "+$destination.getName()+" for having hotels with children discount");
+	        
+        }		
+end
+
+rule "Add points to destinations with selected transportation"
     no-loop true
 	lock-on-active true
     when
@@ -21,8 +120,10 @@ rule "Add points to destinations with selected trasnportation"
         $destination: Destination(transportation contains $transport)
     then
 		modify($destination) {
-			setScore($destination.getScore() + 5);	
+			setScore($destination.getScore() + 5);
         }		
+        System.out.println("5 points goes to "+$destination.getName()+" for having transportation type: "+$transport);	
+        
 end
 
 rule "Add points to destinations which are user interests"
@@ -36,7 +137,9 @@ rule "Add points to destinations which are user interests"
     then
 		modify($destination) {
 			setScore($destination.getScore() + 5*$cats.size());	
+			
         }		
+        System.out.println(""+5*$cats.size()+" points goes to "+$destination.getName()+" for having user interests");
 end
 
 rule "Add points to destinations with selected local food"
@@ -50,7 +153,9 @@ rule "Add points to destinations with selected local food"
     then
 		modify($destination) {
 			setScore($destination.getScore() + 5*$foodList.size());	
+			
         }		
+        System.out.println(""+5*$foodList.size()+" points goes to "+$destination.getName()+" for having user's food options");
 end
 
 rule "Add points to destinations for younger population"
@@ -65,8 +170,9 @@ rule "Add points to destinations for younger population"
         )
     then
     	modify($destination) {
-			setScore($destination.getScore() + 5 * $value);
-			}
+			setScore($destination.getScore() + 5 * $value);		
+		}
+		System.out.println(""+5 * $value+" points goes to "+$destination.getName()+" for younger population");
 end
 
 rule "Add points to destinations for older population"
@@ -81,8 +187,9 @@ rule "Add points to destinations for older population"
         )
     then
     	modify($destination) {
-			setScore($destination.getScore() + 5 * $value);
-			}
+			setScore($destination.getScore() + 5 * $value);	
+		}
+		System.out.println(""+5 * $value+" points goes to "+$destination.getName()+" for older population");
 end
 
 

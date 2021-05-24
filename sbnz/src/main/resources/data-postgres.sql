@@ -85,23 +85,23 @@ insert into destination_transportation (destination_id, transportation) values (
 insert into destination_transportation (destination_id, transportation) values (5, 4);
 
 ----- HOTELS
-insert into hotel (name, stars, active, destination_id) values ('Alta Mar', 4, true, 1);
-insert into hotel (name, stars, active, destination_id) values ('Mandarin Oriental Ritz', 5, true, 1);
-insert into hotel (name, stars, active, destination_id) values ('Four Seasons Madrid', 5, true, 1);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Alta Mar', 4, true, 1, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Mandarin Oriental Ritz', 5, true, 1, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Four Seasons Madrid', 5, true, 1, false);
 
-insert into hotel (name, stars, active, destination_id) values ('Britannia International', 2, true, 2);
-insert into hotel (name, stars, active, destination_id) values ('Smart Hyde Park View', 3, true, 2);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Britannia International', 2, true, 2, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Smart Hyde Park View', 3, true, 2, false);
 
-insert into hotel (name, stars, active, destination_id) values ('Le Regent Monmartre', 5, true, 3);
-insert into hotel (name, stars, active, destination_id) values ('Hotel Paris', 4, true, 3);
-insert into hotel (name, stars, active, destination_id) values ('Shangri La', 5, true, 3);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Le Regent Monmartre', 5, true, 3, false);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Hotel Paris', 4, true, 3, false);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Shangri La', 5, true, 3, false);
 
-insert into hotel (name, stars, active, destination_id) values ('Palazzo Manfredi', 4, true, 4);
-insert into hotel (name, stars, active, destination_id) values ('Otivm Hotel', 2, true, 4);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Palazzo Manfredi', 4, true, 4, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Otivm Hotel', 2, true, 4, false);
 
-insert into hotel (name, stars, active, destination_id) values ('Park Inn by Radisson', 5, true, 5);
-insert into hotel (name, stars, active, destination_id) values ('Alexanderplatz', 4, true, 5);
-insert into hotel (name, stars, active, destination_id) values ('Adlon Hotel', 1, true, 5);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Park Inn by Radisson', 5, true, 5, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Alexanderplatz', 4, true, 5, true);
+insert into hotel (name, stars, active, destination_id, children_discount) values ('Adlon Hotel', 1, true, 5, true);
 
 ---- USER INTERESTS
 insert into users_interests (registered_user_id, interests_id) values (1, 1);

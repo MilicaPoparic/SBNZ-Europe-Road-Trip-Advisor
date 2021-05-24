@@ -8,22 +8,23 @@ import com.sbnz.model.Transportation;
 
 //treba budzet da se sredi u smislu da ima od do!
 //ostale parametre odraditi
-//za children dodati flag u hotelu 1.
+//za children dodati flag u hotelu 1. GOTOVO
 //grupisati pravila
 //srediti keySession da bude jedna
 //srediti frontend, konkretno ovaj zahtev
 //dodati slike kod onih kartica, tj u destinations
 //registracija
 
+// promeniti na frontu accommodation polje za unos
 
 
 public class SearchDTO {
 	public ArrayList<LocalFood> localFood; //done
 	public Transportation transportation; //done
-	public String budget; 
-	public Boolean children;
-	public String accommodation;
-	public Integer numberOfPeople;
+	public String budget; // done osnovno
+	public Boolean children; // done
+	public Integer accommodation; // done
+	public Integer numberOfPeople; // for budget
 	public Date startDate;
 	public Date endDate;
 	public Integer maxDistance;
@@ -33,7 +34,7 @@ public class SearchDTO {
 	}
 
 	public SearchDTO(ArrayList<LocalFood> localFood, Transportation transportation, String budget, Boolean children,
-			String accommodation, Integer numberOfPeople, Date startDate, Date endDate, Integer maxDistance) {
+			Integer accommodation, Integer numberOfPeople, Date startDate, Date endDate, Integer maxDistance) {
 		super();
 		this.localFood = localFood;
 		this.transportation = transportation;
@@ -78,11 +79,11 @@ public class SearchDTO {
 		this.children = children;
 	}
 
-	public String getAccommodation() {
+	public Integer getAccommodation() {
 		return accommodation;
 	}
 
-	public void setAccommodation(String accommodation) {
+	public void setAccommodation(Integer accommodation) {
 		this.accommodation = accommodation;
 	}
 
