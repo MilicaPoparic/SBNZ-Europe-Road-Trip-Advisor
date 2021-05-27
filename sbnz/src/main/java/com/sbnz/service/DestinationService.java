@@ -100,7 +100,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
-		List<DestinationDTO> resultDestinations = new ArrayList<DestinationDTO>();
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.insert(ru);
@@ -120,7 +119,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
-		List<DestinationDTO> resultDestinations = new ArrayList<DestinationDTO>();
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.insert(ru);
@@ -129,7 +127,28 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 		allDestinations.forEach(kieSession::insert);
 
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
 		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+
+		kieSession.getAgenda().getAgendaGroup("budget").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+
+		if (searchDTO.transportation != null) {
+			kieSession.getAgenda().getAgendaGroup("transportation").setFocus();
+			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		}
+		if (searchDTO.localFood != null) {
+			kieSession.getAgenda().getAgendaGroup("food").setFocus();
+			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		}
+		if (searchDTO.accommodation != null) {
+			kieSession.getAgenda().getAgendaGroup("accommodation").setFocus();
+			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		}
+		if (searchDTO.children != null) {
+			kieSession.getAgenda().getAgendaGroup("children").setFocus();
+			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		}
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);

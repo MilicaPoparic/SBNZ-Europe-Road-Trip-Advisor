@@ -11,13 +11,54 @@ import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.LocalFood;
 import com.sbnz.model.Transportation;
 
-//declare any global variables here
-//distance(double lat1, double lon1, double lat2, double lon2)
 // TODO pravilo za max distance
+// TODO pravilo za no budget ()
 
-rule "Add points to destinations with high budget"
+rule "Predict user's budget based on profession (student)"
+    agenda-group "budget"
     no-loop true
 	lock-on-active true
+    when
+        $user: RegisteredUser(profession == "student")
+    	$search: SearchDTO($budget: budget)  
+    then
+		modify($search) {
+			setBudget("medium");	
+	    }
+	    System.out.println("Predicted budget is medium");	
+end
+
+rule "Predict user's budget based on profession (employed)"
+    agenda-group "budget"
+    no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser(profession=="employed")
+    	$search: SearchDTO($budget: budget)  
+    then
+		modify($search) {
+			setBudget("high");	
+	    }
+	    System.out.println("Predicted budget is high");	
+end
+
+rule "Predict user's budget based on profession (unemployed)"
+    agenda-group "budget"
+    no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser(profession=="unemployed")
+    	$search: SearchDTO($budget: budget)
+    then
+		modify($search) {
+			setBudget("low");	
+	    }	
+	    System.out.println("Predicted budget is low");
+end
+
+rule "Add points to destinations with high budget"
+    agenda-group "budget"
+    no-loop true
     when
         $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "high")  
         $destination: Destination($lat1: locationLat, $lon1: locationLon)
@@ -25,19 +66,18 @@ rule "Add points to destinations with high budget"
     
     	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
     	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
-
+    	eval($estimatedBudget > 2500)
     then
-    	if($estimatedBudget > 2500) {
-			modify($destination) {
-				setScore($destination.getScore() + 10);	
-	        }
-	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - high, estimated budget: "+$estimatedBudget +"e");	
-       }
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+	    }
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - high, estimated budget: "+$estimatedBudget +"e");	
+       
 end
 
 rule "Add points to destinations with medium budget"
+    agenda-group "budget"
     no-loop true
-	lock-on-active true
     when
         $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "medium")  
         $destination: Destination($lat1: locationLat, $lon1: locationLat)
@@ -45,21 +85,19 @@ rule "Add points to destinations with medium budget"
     
     	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
     	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
-        
+        eval($estimatedBudget < 2500 && $estimatedBudget > 1000)
 	
     then
-    	if($estimatedBudget < 2500 && $estimatedBudget > 1000){
-			modify($destination) {
-				setScore($destination.getScore() + 10);	
-	        }
-	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - medium, estimated budget: "+$estimatedBudget +"e");	
-       }
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+	    }
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - medium, estimated budget: "+$estimatedBudget +"e");	
 end
 
 
 rule "Add points to destinations with low budget"
+    agenda-group "budget"
     no-loop true
-	lock-on-active true
     when
         $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "low")  
         $destination: Destination($lat1: locationLat, $lon1: locationLon)
@@ -67,17 +105,17 @@ rule "Add points to destinations with low budget"
     
     	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
     	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
-    
+    	eval($estimatedBudget < 2500)
     then
-    	if($estimatedBudget < 1000) {
-			modify($destination) {
-				setScore($destination.getScore() + 10);	
-	        }
-	       System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - low, estimated budget: "+$estimatedBudget +"e");	
-       }
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+		}
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - low, estimated budget: "+$estimatedBudget +"e");	
+       
 end
 
 rule "Add points to destinations with wanted accommodation level"
+    agenda-group "accommodation"
     no-loop true
 	lock-on-active true
     when
@@ -85,7 +123,6 @@ rule "Add points to destinations with wanted accommodation level"
         $destination: Destination($hotels : hotels)
         accumulate( Hotel( $h: this , stars == $accommodation) from $hotels,
         			 $hotelsWithAccommodation: collectList( $h ))
-        
     then	
 		modify($destination) {
 			setScore($destination.getScore() + 5*$hotelsWithAccommodation.size());	
@@ -94,6 +131,7 @@ rule "Add points to destinations with wanted accommodation level"
 end
 
 rule "Add points to destinations with hotels which have children discount if user has children"
+    agenda-group "children"
     no-loop true
 	lock-on-active true
     when
@@ -113,6 +151,7 @@ rule "Add points to destinations with hotels which have children discount if use
 end
 
 rule "Add points to destinations with selected transportation"
+    agenda-group "transportation"
     no-loop true
 	lock-on-active true
     when
@@ -127,6 +166,7 @@ rule "Add points to destinations with selected transportation"
 end
 
 rule "Add points to destinations which are user interests"
+	agenda-group "default"
 	no-loop true
 	lock-on-active true
     when
@@ -143,6 +183,7 @@ rule "Add points to destinations which are user interests"
 end
 
 rule "Add points to destinations with selected local food"
+	agenda-group "food"
 	no-loop true
 	lock-on-active true
     when
@@ -159,6 +200,7 @@ rule "Add points to destinations with selected local food"
 end
 
 rule "Add points to destinations for younger population"
+    agenda-group "default"
     no-loop
 	lock-on-active true
     when
@@ -176,6 +218,7 @@ rule "Add points to destinations for younger population"
 end
 
 rule "Add points to destinations for older population"
+    agenda-group "default"
     no-loop
 	lock-on-active true
     when
