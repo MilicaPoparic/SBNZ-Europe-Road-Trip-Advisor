@@ -12,7 +12,24 @@ import com.sbnz.model.LocalFood;
 import com.sbnz.model.Transportation;
 
 // TODO pravilo za max distance
-// TODO pravilo za no budget ()
+rule "Add points to destinations with distance smaller than user's max distance"
+    agenda-group "distance"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($maxDistance: maxDistance)  
+        $destination: Destination($lat1: locationLat, $lon1: locationLon)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	eval($distance <= $maxDistance)
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5);	
+		}
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's maximum distance: "+$maxDistance);	
+       
+end
 
 rule "Predict user's budget based on profession (student)"
     agenda-group "budget"

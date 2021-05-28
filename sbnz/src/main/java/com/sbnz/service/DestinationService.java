@@ -1,10 +1,11 @@
 package com.sbnz.service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
@@ -13,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import com.sbnz.dto.DestinationDTO;
 import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.Destination;
 import com.sbnz.model.RegisteredUser;
@@ -32,6 +33,8 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	@Autowired
 	private KieContainer kieContainer;
+	
+	private final RestTemplate restTemplate = new RestTemplate();
 
 	private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
 
@@ -113,7 +116,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 		return allDestinations;
 	}
 
-	public List<Destination> filterBySearchParams(SearchDTO searchDTO) {
+	public List<Destination> filterBySearchParams(SearchDTO searchDTO) throws JSONException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
@@ -148,11 +151,29 @@ public class DestinationService implements ServiceInterface<Destination> {
 		if (searchDTO.children != null) {
 			kieSession.getAgenda().getAgendaGroup("children").setFocus();
 			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		}		
+		if (searchDTO.maxDistance != null) {
+			kieSession.getAgenda().getAgendaGroup("distance").setFocus();
+			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		}
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);
+		
+//		String test = getPostsPlainJSON();
+//		System.out.println(test);
+//		JSONObject json = new JSONObject(test);
+//		System.out.println(json.getJSONObject("_embedded").getJSONArray("events").length());
+	    
+		
+		
 		return allDestinations;
 	}
+	
+	public String getPostsPlainJSON() {
+        String url = "https://app.ticketmaster.com/discovery/v2/events.json?city=London&apikey=qsYOigPQG9KS64AB2rYiKT4LI3nEqd8G";
+        
+        return this.restTemplate.getForObject(url, String.class);
+    }
 
 }
