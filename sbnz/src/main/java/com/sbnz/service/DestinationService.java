@@ -1,7 +1,12 @@
 package com.sbnz.service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.json.JSONException;
@@ -11,11 +16,18 @@ import org.kie.api.runtime.KieSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.google.gson.Gson;
+import com.sbnz.dto.DestinationEventsDTO;
+import com.sbnz.dto.EventDTO;
 import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.Destination;
 import com.sbnz.model.RegisteredUser;
@@ -117,7 +129,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 		return allDestinations;
 	}
 
-	public List<Destination> filterBySearchParams(SearchDTO searchDTO) throws JSONException {
+	public List<Destination> filterBySearchParams(SearchDTO searchDTO) throws JSONException, ParseException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
@@ -163,22 +175,66 @@ public class DestinationService implements ServiceInterface<Destination> {
 			kieSession.getAgenda().getAgendaGroup("distance").setFocus();
 			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		}
+
+		// get upcoming events
+		List<DestinationEventsDTO> eventsList = new ArrayList<DestinationEventsDTO>();
+		for (Destination d : allDestinations) {
+			DestinationEventsDTO de = new DestinationEventsDTO();
+			de.setDestination(d);
+			de.setEvents(getEvents(d.getLocationLat(), d.getLocationLon()));
+			eventsList.add(de);
+		}
+		eventsList.forEach(kieSession::insert);
+
+		kieSession.getAgenda().getAgendaGroup("events").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);
 
-//		String test = getPostsPlainJSON();
-//		System.out.println(test);
-//		JSONObject json = new JSONObject(test);
-//		System.out.println(json.getJSONObject("_embedded").getJSONArray("events").length());
-
 		return allDestinations;
 	}
 
-	public String getPostsPlainJSON() {
-		String url = "https://app.ticketmaster.com/discovery/v2/events.json?city=London&apikey=qsYOigPQG9KS64AB2rYiKT4LI3nEqd8G";
+	public ArrayList<EventDTO> getEvents(Double lat, Double lon) throws JSONException, ParseException {
 
-		return this.restTemplate.getForObject(url, String.class);
+		String url = "HTTPS://api.predicthq.com/v1/events/?location_around.decay=0.5&location_around.offset=100km&location_around.origin="+lat+","+lon+"&location_around.scale=10km&page=0&size=100";
+
+		final HttpHeaders headers = new HttpHeaders();
+		headers.set("Authorization", "Bearer L3cMHzABhAMuiT2atcUo2IHxynCOH74eefpSNiJg");
+		headers.set("Accept", "application/json");
+
+		// Create a new HttpEntity
+		final HttpEntity<String> entity = new HttpEntity<String>(headers);
+
+		// Execute the method writing your HttpEntity to the request
+		ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+		//System.out.println(response.getBody());
+		
+		JSONObject json = new JSONObject(response.getBody());	
+		@SuppressWarnings("unchecked")
+		ArrayList<Object> resultsList = (ArrayList) json.get("results");
+		Gson gson = new Gson();
+		
+		ArrayList<EventDTO> events = new ArrayList<EventDTO>();
+		
+		for (Object o: resultsList)
+	    {			
+		  String objectString = gson.toJson(o);
+		  JSONObject objectJSON = new JSONObject(objectString);
+
+		  String title = objectJSON.getString("title");
+		  String category = objectJSON.getString("category");
+		  Date start=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("start"));
+		  Date end=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("end"));
+		  String location = objectJSON.getString("location");
+		  Double latitude = Double.parseDouble(location.substring(1, location.length()-1).split(",")[1]);
+		  Double longitude = Double.parseDouble(location.substring(1, location.length()-1).split(",")[0]);
+		  
+		  EventDTO event = new EventDTO(title, category, start, end, latitude, longitude);
+	      events.add(event);
+	    }
+		return events;
 	}
 
 }

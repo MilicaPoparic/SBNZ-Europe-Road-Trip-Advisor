@@ -1,0 +1,159 @@
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.model.Destination;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.dto.DestinationEventsDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
+
+
+rule "Add points to destinations with upcoming events (type observances)"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO(startDate == null, endDate == null)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfObservances: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "observances", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "city") from $interests,
+        			 $cityCategory: collectList( $c ))
+        			 
+       eval($cityCategory > 0, $numberOfObservances > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (city category):  "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type politics)"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO(startDate == null, endDate == null)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfPolitics: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "politics", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "history") from $interests,
+        			 $historyCategory: collectList( $c ))
+        			 
+       eval($historyCategory > 0, $numberOfPolitics > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (history category):  "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type concerts)"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO(startDate == null, endDate == null)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOConcerts: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "concerts" || $c == "festivals", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "concerts" || name == "night life") from $interests,
+        			 $concertsCategory: collectList( $c ))
+        			 
+       eval($concertsCategory > 0, $numberOConcerts > 2)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (concerts category):  "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type performing-arts)"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO(startDate == null, endDate == null)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($value: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "performing-arts", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "museums") from $interests,
+        			 $museumsCategory: collectList( $c ))
+        			 
+       eval($museumsCategory > 0, $value > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (city category):  "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type sports)"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO(startDate == null, endDate == null)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfSports: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "sports", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "hiking" || name == "adventure" || name == "sailing") from $interests,
+        			 $sportsCategory: collectList( $c ))
+        			 
+       eval($sportsCategory > 0, $numberOfSports > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (sports category):  "+$destination.getName());	
+       
+end
+
+
