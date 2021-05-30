@@ -17,10 +17,9 @@ import com.sbnz.model.Transportation;
 
 // promeniti na frontu accommodation polje za unos
 
-
 public class SearchDTO {
-	public ArrayList<LocalFood> localFood; //done
-	public Transportation transportation; //done
+	public ArrayList<LocalFood> localFood; // done
+	public Transportation transportation; // done
 	public String budget; // done osnovno
 	public Boolean children; // done
 	public Integer accommodation; // done
@@ -41,10 +40,13 @@ public class SearchDTO {
 		this.budget = budget;
 		this.children = children;
 		this.accommodation = accommodation;
-		this.numberOfPeople = numberOfPeople;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.maxDistance = maxDistance;
+		if (numberOfPeople == null)
+			this.numberOfPeople = 1;
+		else
+			this.numberOfPeople = numberOfPeople;
 	}
 
 	public ArrayList<LocalFood> getLocalFood() {
