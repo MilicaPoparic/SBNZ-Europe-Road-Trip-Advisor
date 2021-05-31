@@ -13,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.QueryResults;
+import org.kie.api.runtime.rule.QueryResultsRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +191,12 @@ public class DestinationService implements ServiceInterface<Destination> {
 		kieSession.getAgenda().getAgendaGroup("events").setFocus();
 		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 
+		QueryResults trendingDestinations = kieSession.getQueryResults("Get trending destination", true);
+
+		for (QueryResultsRow queryResult : trendingDestinations) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			System.out.println(d.getName() + " trending");
+		}
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);

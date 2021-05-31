@@ -159,15 +159,13 @@ rule "Add points to destinations with hotels which have children discount if use
         $destination: Destination($hotels : hotels)
         accumulate( Hotel( $h: this , childrenDiscount == $children) from $hotels,
         			 $hotelsWithDiscount: collectList( $h ))
-        
-    then
-    	if ($children == true){   	
-			modify($destination) {
-				setScore($destination.getScore() + 5*$hotelsWithDiscount.size());	
-	        }
-	       System.out.println(""+5*$hotelsWithDiscount.size()+" points goes to "+$destination.getName()+" for having hotels with children discount");
-	        
-        }		
+        eval ($children == true)
+    then  	
+		modify($destination) {
+			setScore($destination.getScore() + 5*$hotelsWithDiscount.size());	
+	    }
+		System.out.println(""+5*$hotelsWithDiscount.size()+" points goes to "+$destination.getName()+" for having hotels with children discount");
+        		
 end
 
 rule "Add points to destinations with selected transportation"

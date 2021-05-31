@@ -308,3 +308,21 @@ rule "Add points to destinations with upcoming events (type concerts) date selec
 	    System.out.println("Trending destination (concerts category) date selected:  "+$destination.getName());	
        
 end
+
+rule "Add points to trending destinations"
+    agenda-group "events"
+    no-loop true
+    when
+        $destination: Destination(trending == true)
+    then
+    	modify($destination) {
+			setScore($destination.getScore() + 5);	    
+        }		
+        	System.out.println("5 points goes to "+$destination.getName()+" for being trending destination");
+end
+
+query "Get trending destination" (Boolean $trending)
+	$destinations: Destination(trending == $trending)
+end
+
+
