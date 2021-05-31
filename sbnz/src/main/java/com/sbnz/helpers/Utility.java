@@ -50,4 +50,29 @@ public class Utility {
 	  return (rad * 180.0 / Math.PI);
 	}
 	
+	public static Date workWithDates(Date date, String operator, int entity, int number) {
+	    if (date != null) {
+	        java.util.Calendar newCal = java.util.Calendar.getInstance();
+	        newCal.setTime(date);
+	        if (operator.equals("-")) { //normally we would add, except if we want to subtract
+	            number = -number;
+	        }
+	        if (entity == 1) { //years
+	            newCal.add(java.util.Calendar.YEAR, number);
+	        } else if (entity== 2) { //months
+	            newCal.add(java.util.Calendar.MONTH, number);       
+	        } else if (entity== 3) { //days
+	            newCal.add(java.util.Calendar.DATE, number);        
+	        } else if (entity== 4) { //hours
+	            newCal.add(java.util.Calendar.HOUR, number);        
+	        } else if (entity== 5) { //minutes
+	            newCal.add(java.util.Calendar.MINUTE, number);      
+	        } else if (entity== 6) { //seconds
+	            newCal.add(java.util.Calendar.SECOND, number);      
+	        }
+	        return newCal.getTime();    
+	    } else {
+	        return date;
+	    }
+	}
 }

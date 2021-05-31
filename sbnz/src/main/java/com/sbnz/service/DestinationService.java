@@ -188,7 +188,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 		kieSession.getAgenda().getAgendaGroup("events").setFocus();
 		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
-		
+
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);
@@ -198,7 +198,8 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	public ArrayList<EventDTO> getEvents(Double lat, Double lon) throws JSONException, ParseException {
 
-		String url = "HTTPS://api.predicthq.com/v1/events/?location_around.decay=0.5&location_around.offset=100km&location_around.origin="+lat+","+lon+"&location_around.scale=10km&page=0&size=100";
+		String url = "HTTPS://api.predicthq.com/v1/events/?location_around.decay=0.5&location_around.offset=100km&location_around.origin="
+				+ lat + "," + lon + "&location_around.scale=10km&page=0&size=100";
 
 		final HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer L3cMHzABhAMuiT2atcUo2IHxynCOH74eefpSNiJg");
@@ -209,31 +210,30 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 		// Execute the method writing your HttpEntity to the request
 		ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
-		//System.out.println(response.getBody());
-		
-		JSONObject json = new JSONObject(response.getBody());	
+		// System.out.println(response.getBody());
+
+		JSONObject json = new JSONObject(response.getBody());
 		@SuppressWarnings("unchecked")
 		ArrayList<Object> resultsList = (ArrayList) json.get("results");
 		Gson gson = new Gson();
-		
-		ArrayList<EventDTO> events = new ArrayList<EventDTO>();
-		
-		for (Object o: resultsList)
-	    {			
-		  String objectString = gson.toJson(o);
-		  JSONObject objectJSON = new JSONObject(objectString);
 
-		  String title = objectJSON.getString("title");
-		  String category = objectJSON.getString("category");
-		  Date start=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("start"));
-		  Date end=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("end"));
-		  String location = objectJSON.getString("location");
-		  Double latitude = Double.parseDouble(location.substring(1, location.length()-1).split(",")[1]);
-		  Double longitude = Double.parseDouble(location.substring(1, location.length()-1).split(",")[0]);
-		  
-		  EventDTO event = new EventDTO(title, category, start, end, latitude, longitude);
-	      events.add(event);
-	    }
+		ArrayList<EventDTO> events = new ArrayList<EventDTO>();
+
+		for (Object o : resultsList) {
+			String objectString = gson.toJson(o);
+			JSONObject objectJSON = new JSONObject(objectString);
+
+			String title = objectJSON.getString("title");
+			String category = objectJSON.getString("category");
+			Date start = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("start"));
+			Date end = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(objectJSON.getString("end"));
+			String location = objectJSON.getString("location");
+			Double latitude = Double.parseDouble(location.substring(1, location.length() - 1).split(",")[1]);
+			Double longitude = Double.parseDouble(location.substring(1, location.length() - 1).split(",")[0]);
+
+			EventDTO event = new EventDTO(title, category, start, end, latitude, longitude);
+			events.add(event);
+		}
 		return events;
 	}
 

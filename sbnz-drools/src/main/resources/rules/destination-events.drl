@@ -7,10 +7,11 @@ import com.sbnz.model.Destination;
 import com.sbnz.model.Category;
 import com.sbnz.model.Hotel;
 import com.sbnz.dto.SearchDTO;
+import com.sbnz.dto.EventDTO;
 import com.sbnz.dto.DestinationEventsDTO;
 import com.sbnz.model.LocalFood;
 import com.sbnz.model.Transportation;
-
+import java.util.Date;
 
 rule "Add points to destinations with upcoming events (type observances)"
     agenda-group "events"
@@ -23,14 +24,15 @@ rule "Add points to destinations with upcoming events (type observances)"
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($numberOfObservances: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "observances", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	EventDTO($c: category, $c == "observances", $startDate: start, $startDate > (new Date()), $startDate < (Utility.workWithDates(new Date(), "+", 2, 1))) from $events,
         	count($c)
         )
         
         accumulate(Category( $c: this , name == "city") from $interests,
         			 $cityCategory: collectList( $c ))
         			 
-       eval($cityCategory > 0, $numberOfObservances > 1)
+       eval($cityCategory.size() > 0)
+       eval($numberOfObservances > 1)
     
     then
 		modify($destination) {
@@ -52,14 +54,15 @@ rule "Add points to destinations with upcoming events (type politics)"
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($numberOfPolitics: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "politics", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	EventDTO($c: category, $c == "politics", $startDate: start, $startDate > (new Date()), $startDate < (Utility.workWithDates(new Date(), "+", 2, 1))) from $events,
         	count($c)
         )
         
         accumulate(Category( $c: this , name == "history") from $interests,
         			 $historyCategory: collectList( $c ))
         			 
-       eval($historyCategory > 0, $numberOfPolitics > 1)
+       eval($historyCategory.size() > 0)
+       eval($numberOfPolitics > 1)
     
     then
 		modify($destination) {
@@ -81,14 +84,15 @@ rule "Add points to destinations with upcoming events (type concerts)"
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($numberOConcerts: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "concerts" || $c == "festivals", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	EventDTO($c: category, $c == "concerts" || $c=="festivals", $startDate: start, $startDate > (new Date()), $startDate < (Utility.workWithDates(new Date(), "+", 2, 1))) from $events,
         	count($c)
         )
         
         accumulate(Category( $c: this , name == "concerts" || name == "night life") from $interests,
         			 $concertsCategory: collectList( $c ))
         			 
-       eval($concertsCategory > 0, $numberOConcerts > 2)
+       eval($concertsCategory.size() > 0)
+       eval($numberOConcerts > 2)
     
     then
 		modify($destination) {
@@ -110,14 +114,15 @@ rule "Add points to destinations with upcoming events (type performing-arts)"
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($value: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "performing-arts", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	EventDTO($c: category, $c == "perfroming-arts", $startDate: start, $startDate > (new Date()), $startDate < (Utility.workWithDates(new Date(), "+", 2, 1))) from $events,
         	count($c)
         )
         
         accumulate(Category( $c: this , name == "museums") from $interests,
         			 $museumsCategory: collectList( $c ))
         			 
-       eval($museumsCategory > 0, $value > 1)
+       eval($museumsCategory.size() > 0)
+       eval($value > 1)
     
     then
 		modify($destination) {
@@ -139,14 +144,15 @@ rule "Add points to destinations with upcoming events (type sports)"
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($numberOfSports: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "sports", $startDate: start, $datum.isAfter(LocalDate.now()), $datum.isBefore(LocalDate.now().plusMonths(1))) from $events,
+        	EventDTO($c: category, $c == "sports", $startDate: start, $startDate > (new Date()), $startDate < (Utility.workWithDates(new Date(), "+", 2, 1))) from $events,
         	count($c)
         )
         
         accumulate(Category( $c: this , name == "hiking" || name == "adventure" || name == "sailing") from $interests,
         			 $sportsCategory: collectList( $c ))
         			 
-       eval($sportsCategory > 0, $numberOfSports > 1)
+       eval($sportsCategory.size() > 0)
+       eval($numberOfSports > 1)
     
     then
 		modify($destination) {
@@ -156,4 +162,149 @@ rule "Add points to destinations with upcoming events (type sports)"
        
 end
 
+rule "Add points to destinations with upcoming events (type sports) date selected"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($startFilter: startDate , $endFilter: endDate)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfSports: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "sports", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "hiking" || name == "adventure" || name == "sailing") from $interests,
+        			 $sportsCategory: collectList( $c ))
+        			 
+       eval($sportsCategory.size() > 0)
+       eval($numberOfSports > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (sports category): date selected "+$destination.getName());	
+       
+end
 
+rule "Add points to destinations with upcoming events (type performing-arts) date selected"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($startFilter: startDate , $endFilter: endDate)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($value: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "performing-arts", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "museums") from $interests,
+        			 $museumsCategory: collectList( $c ))
+        			 
+       eval($museumsCategory.size() > 0)
+       eval($value > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (city category): date selected "+$destination.getName());	
+       
+end
+
+rule "Add points to destinations with upcoming events (type observances) date selected"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($startFilter: startDate , $endFilter: endDate)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfObservances: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "observances", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "city") from $interests,
+        			 $cityCategory: collectList( $c ))
+        			 
+       eval($cityCategory.size() > 0)
+       eval($numberOfObservances > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (city category): date selected "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type politics) date selected"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($startFilter: startDate , $endFilter: endDate)  
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOfPolitics: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "politics", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "history") from $interests,
+        			 $historyCategory: collectList( $c ))
+        			 
+       eval($historyCategory.size() > 0)
+       eval($numberOfPolitics > 1)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (history category) date selected:  "+$destination.getName());	
+       
+end
+
+
+rule "Add points to destinations with upcoming events (type concerts) date selected"
+    agenda-group "events"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($startFilter: startDate , $endFilter: endDate) 
+        $destination: Destination($name: name, trending == false)
+        $user: RegisteredUser($interests: interests)
+        $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
+        
+        Number($numberOConcerts: intValue >= 1) from accumulate(
+        	EventDTO($c: category, $c == "concerts", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	count($c)
+        )
+        
+        accumulate(Category( $c: this , name == "concerts" || name == "night life") from $interests,
+        			 $concertsCategory: collectList( $c ))
+        			 
+       eval($concertsCategory.size() > 0)
+       eval($numberOConcerts > 2)
+    
+    then
+		modify($destination) {
+			setTrending(true);	
+		}
+	    System.out.println("Trending destination (concerts category) date selected:  "+$destination.getName());	
+       
+end

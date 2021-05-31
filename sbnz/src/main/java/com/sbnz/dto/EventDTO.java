@@ -11,19 +11,19 @@ public class EventDTO {
 	 * health-warnings
 	 * 
 	 */
-	private String title;
-	private String category;
-	private Date start;
-	private Date end;
-	private Double lat;
-	private Double lon;
+	public String title;
+	public String category;
+	public Date start;
+	public Date endD;
+	public Double lat;
+	public Double lon;
 
 	public EventDTO(String title, String category, Date start, Date end, Double lat, Double lon) {
 		super();
 		this.title = title;
 		this.category = category;
 		this.start = start;
-		this.end = end;
+		this.endD = end;
 		this.lat = lat;
 		this.lon = lon;
 	}
@@ -56,12 +56,12 @@ public class EventDTO {
 		this.start = start;
 	}
 
-	public Date getEnd() {
-		return end;
+	public Date getEndD() {
+		return endD;
 	}
 
-	public void setEnd(Date end) {
-		this.end = end;
+	public void setEndD(Date end) {
+		this.endD = end;
 	}
 
 	public Double getLat() {

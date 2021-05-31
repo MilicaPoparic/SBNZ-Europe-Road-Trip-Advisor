@@ -111,7 +111,9 @@ insert into hotel (name, stars, active, destination_id, children_discount) value
 
 ---- USER INTERESTS
 insert into users_interests (registered_user_id, interests_id) values (1, 1);
+insert into users_interests (registered_user_id, interests_id) values (1, 2);
 insert into users_interests (registered_user_id, interests_id) values (1, 3);
+insert into users_interests (registered_user_id, interests_id) values (1, 11);
 insert into users_interests (registered_user_id, interests_id) values (1, 13);
 
 insert into users_interests (registered_user_id, interests_id) values (2, 1);
