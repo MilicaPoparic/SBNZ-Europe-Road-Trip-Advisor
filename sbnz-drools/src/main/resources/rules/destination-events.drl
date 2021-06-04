@@ -92,7 +92,7 @@ rule "Add points to destinations with upcoming events (type concerts)"
         			 $concertsCategory: collectList( $c ))
         			 
        eval($concertsCategory.size() > 0)
-       eval($numberOConcerts > 2)
+       eval($numberOConcerts > 1)
     
     then
 		modify($destination) {
@@ -291,7 +291,7 @@ rule "Add points to destinations with upcoming events (type concerts) date selec
         $destinationEvents: DestinationEventsDTO($dest: destination, $dest.name == $name, $events: events)
         
         Number($numberOConcerts: intValue >= 1) from accumulate(
-        	EventDTO($c: category, $c == "concerts", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
+        	EventDTO($c: category, $c == "concerts" || $c == "festivals", $startDate: start, $endDate: endD,  $startDate > $startFilter, $startDate < $endFilter, $endDate < $endFilter) from $events,
         	count($c)
         )
         
@@ -299,7 +299,7 @@ rule "Add points to destinations with upcoming events (type concerts) date selec
         			 $concertsCategory: collectList( $c ))
         			 
        eval($concertsCategory.size() > 0)
-       eval($numberOConcerts > 2)
+       eval($numberOConcerts > 1)
     
     then
 		modify($destination) {

@@ -11,7 +11,7 @@ import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.LocalFood;
 import com.sbnz.model.Transportation;
 
-// TODO pravilo za max distance
+
 rule "Add points to destinations with distance smaller than user's max distance"
     agenda-group "distance"
     no-loop true

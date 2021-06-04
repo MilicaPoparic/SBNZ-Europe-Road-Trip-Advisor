@@ -17,6 +17,8 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.sbnz.dto.DestinationEventsDTO;
+import com.sbnz.dto.EventDTO;
 import com.sbnz.dto.SearchDTO;
 import com.sbnz.model.Category;
 import com.sbnz.model.Destination;
@@ -44,9 +46,12 @@ public class DestinationServiceUnitTests {
 	private static final String transportation_agenda = "transportation";
 
 	private static final String food_agenda = "food";
+	
+	private static final String events_agenda = "events";
 
 	RegisteredUser ru;
 	ArrayList<Destination> destinations;
+	ArrayList<DestinationEventsDTO> destinationEvents;
 
 	@SuppressWarnings("deprecation")
 	@Before
@@ -204,8 +209,63 @@ public class DestinationServiceUnitTests {
 		interests.add(shopping);
 		interests.add(museums);
 		interests.add(city);
+		interests.add(concerts);
 		ru.setInterests(interests);
-
+		
+		
+		DestinationEventsDTO de1 = new DestinationEventsDTO();
+		DestinationEventsDTO de2 = new DestinationEventsDTO();
+		DestinationEventsDTO de3 = new DestinationEventsDTO();
+		DestinationEventsDTO de4 = new DestinationEventsDTO();
+		DestinationEventsDTO de5 = new DestinationEventsDTO();
+		destinationEvents = new ArrayList<DestinationEventsDTO>();
+		
+		ArrayList<EventDTO> e1 = new ArrayList<EventDTO>();
+		EventDTO e11 = new EventDTO("Some concert","concerts", new GregorianCalendar(2021, Calendar.JUNE, 25).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 26).getTime(), 40.41, -3.70);
+		EventDTO e12 = new EventDTO("Some concert","festivals", new GregorianCalendar(2021, Calendar.JUNE, 27).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 29).getTime(), 40.41, -3.70);
+		e1.add(e11);
+		e1.add(e12);
+		de1.setEvents(e1);
+		de1.setDestination(d1);
+		destinationEvents.add(de1);
+		
+		ArrayList<EventDTO> e2 = new ArrayList<EventDTO>();
+		EventDTO e21 = new EventDTO("Some concert","concerts", new GregorianCalendar(2021, Calendar.JUNE, 25).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 26).getTime(), 51.41, -0.12);
+		EventDTO e22 = new EventDTO("Some sport event","sports", new GregorianCalendar(2021, Calendar.JUNE, 27).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 29).getTime(), 51.41, -0.12);
+		e2.add(e21);
+		e2.add(e22);
+		de2.setEvents(e2);
+		de2.setDestination(d2);
+		destinationEvents.add(de2);
+		
+		ArrayList<EventDTO> e3 = new ArrayList<EventDTO>();
+		EventDTO e31 = new EventDTO("City tour","observances", new GregorianCalendar(2021, Calendar.JUNE, 24).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 24).getTime(), 48.41, -2.70);
+		EventDTO e32 = new EventDTO("Some sport event","sports", new GregorianCalendar(2021, Calendar.JULY, 2).getTime(), new GregorianCalendar(2021, Calendar.JULY, 4).getTime(), 48.41, -2.70);
+		e3.add(e31);
+		e3.add(e32);
+		de3.setEvents(e3);
+		de3.setDestination(d3);
+		destinationEvents.add(de3);
+		
+		ArrayList<EventDTO> e4 = new ArrayList<EventDTO>();
+		EventDTO e41 = new EventDTO("City tour","observances", new GregorianCalendar(2021, Calendar.JUNE, 24).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 24).getTime(), 52.41, -13.70);
+		EventDTO e42 = new EventDTO("Some sport event","sports", new GregorianCalendar(2021, Calendar.JULY, 2).getTime(), new GregorianCalendar(2021, Calendar.JULY, 4).getTime(), 52.41, -13.70);
+		e4.add(e41);
+		e4.add(e42);
+		de4.setEvents(e4);
+		de4.setDestination(d4);
+		destinationEvents.add(de4);
+		
+		ArrayList<EventDTO> e5 = new ArrayList<EventDTO>();
+		EventDTO e51 = new EventDTO("Some concert","concerts", new GregorianCalendar(2021, Calendar.JUNE, 25).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 26).getTime(), 51.41, -0.12);
+		EventDTO e52 = new EventDTO("Some sport event","sports", new GregorianCalendar(2021, Calendar.JUNE, 27).getTime(), new GregorianCalendar(2021, Calendar.JUNE, 29).getTime(), 51.41, -0.12);
+		e5.add(e51);
+		e5.add(e52);
+		de5.setEvents(e5);
+		de5.setDestination(d5);
+		destinationEvents.add(de5);
+		
+		
 	}
 
 	@Test
@@ -224,7 +284,7 @@ public class DestinationServiceUnitTests {
 
 		// 15 points for having 3 categories for younger population
 		// 5 points for having 1 users interests
-		assertEquals(Double.valueOf(20.0), destinations.get(1).getScore());
+		assertEquals(Double.valueOf(25.0), destinations.get(1).getScore());
 
 		// 15 points for having 3 categories for younger population
 		// 10 points for having 2 users interests
@@ -250,6 +310,7 @@ public class DestinationServiceUnitTests {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setLocalFood(food);
 		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(food_agenda).setFocus();
@@ -277,6 +338,7 @@ public class DestinationServiceUnitTests {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setTransportation(Transportation.car);
 		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(transportation_agenda).setFocus();
@@ -331,6 +393,7 @@ public class DestinationServiceUnitTests {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setAccommodation(4);
 		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(accommodation_agenda).setFocus();
@@ -357,6 +420,7 @@ public class DestinationServiceUnitTests {
 	public void testAddScoreBasedOnDistance() {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(distance_agenda).setFocus();
@@ -386,6 +450,7 @@ public class DestinationServiceUnitTests {
 		searchParams.setNumberOfPeople(1);
 		searchParams.setTransportation(Transportation.plane);
 		searchParams.setBudget("high");
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(budget_agenda).setFocus();
@@ -414,6 +479,7 @@ public class DestinationServiceUnitTests {
 		searchParams.setMaxDistance(1500000);
 		searchParams.setNumberOfPeople(1);
 		searchParams.setTransportation(Transportation.plane);
+		searchParams.setChildren(true);
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.getAgenda().getAgendaGroup(budget_agenda).setFocus();
@@ -474,13 +540,75 @@ public class DestinationServiceUnitTests {
 
 		assertEquals(Double.valueOf(65.0), destinations.get(0).getScore());
 
-		assertEquals(Double.valueOf(50.0), destinations.get(1).getScore());
+		assertEquals(Double.valueOf(55.0), destinations.get(1).getScore());
 
 		assertEquals(Double.valueOf(50.0), destinations.get(2).getScore());
 
 		assertEquals(Double.valueOf(50.0), destinations.get(3).getScore());
 
 		assertEquals(Double.valueOf(65.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnEvents() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(4);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(events_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+		destinationEvents.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		// 2 concerts = 5 points
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnEventsDateSelected() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(4);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+		searchParams.setStartDate(new GregorianCalendar(2021, Calendar.JUNE, 4).getTime());
+		searchParams.setEndDate(new GregorianCalendar(2021, Calendar.JULY, 10).getTime());
+		
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(events_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+		destinationEvents.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		// 2 concerts = 5 points
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(4).getScore());
 		kieSession.dispose();
 	}
 }
