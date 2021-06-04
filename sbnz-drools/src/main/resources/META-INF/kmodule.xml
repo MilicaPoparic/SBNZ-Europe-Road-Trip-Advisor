@@ -3,4 +3,12 @@
 	<kbase name="rules" packages="rules">
         <ksession name="test-session"/>
     </kbase>
+    <kbase name="cepKbase" eventProcessingMode="stream" packages="rules">
+        <ksession name="cepKsession"/>
+    </kbase>
+    
+    <kbase name="cepConfigKbase" eventProcessingMode="stream" packages="rules">
+        <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo"/>
+        <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
+    </kbase>
 </kmodule>
