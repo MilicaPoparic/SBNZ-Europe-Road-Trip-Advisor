@@ -18,6 +18,8 @@ export class RegisterPageComponent implements OnInit {
   emailRegx = /^(([^<>+()\[\]\\.,;:\s@"-#$%&=]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,3}))$/;
   hide = true;
   passwordError = false;
+  professionArray = ["employed", "student", "unemployed"];
+
 
 	constructor(
 		private fb: FormBuilder,
@@ -39,6 +41,7 @@ export class RegisterPageComponent implements OnInit {
       'email':['', [Validators.required, Validators.pattern(this.emailRegx)]],
       'password':['', Validators.required],
       'repeatPassword':['', [Validators.required]],
+      'profession':['', [Validators.required]]
     }
   )};
 
@@ -64,5 +67,9 @@ export class RegisterPageComponent implements OnInit {
       );
       
       
+    }
+
+    changeProfession(event: any) {
+      this.form.controls['profession'].setValue(event.value);
     }
 }

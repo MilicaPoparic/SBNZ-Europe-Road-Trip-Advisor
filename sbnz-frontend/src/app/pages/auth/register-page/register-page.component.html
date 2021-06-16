@@ -22,6 +22,10 @@
         <input type='password' placeholder='Repeat password' class='input-line full-width' formControlName = "repeatPassword">
         <small class="text-danger" id="passwordError" *ngIf="form.controls.repeatPassword.touched && form.controls.repeatPassword.errors?.required">
             This field can't be empty!</small>
+            <mat-form-field><mat-select (selectionChange)="changeProfession($event)" placeholder="Select profession" >
+              <mat-option *ngFor="let f of professionArray" [value]="f">{{f}}</mat-option>
+          </mat-select></mat-form-field>
+        
        </div>
        <!-- TODO: dodati polja za lokaciju, datum rodjenja i profesiju i select za biranje interesovanja -->
 
