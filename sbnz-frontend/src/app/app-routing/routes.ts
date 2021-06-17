@@ -46,4 +46,4 @@ export const routes: Routes = [
 		component:VerificationPageComponent,
 		canActivate: [LoginGuard]
 	}
-];];
+];
