@@ -130,6 +130,7 @@ public class DestinationController {
 	@RequestMapping(method = RequestMethod.POST, value="/filterBySearchParams")
 	@PreAuthorize("hasRole('REGISTERED_USER')")
 	public ResponseEntity<List<DestinationDTO>> filterDestinationsBySearch(@RequestBody SearchDTO searchDTO) {
+		System.out.println("usao sam u malu metodu");
 		List<Destination> destinations = new ArrayList<Destination>();
 		try {
 			destinations = destinationService.filterBySearchParams(searchDTO);

@@ -38,19 +38,23 @@ export class PersonalizeSearchComponent implements OnInit {
   createForm() {
     this.form = this.fb.group({
       'localFood': [[]],
-      'transportation': [''],
-      'budget':[''],
+      'transportation': [],
+      'budget':[null],
       'accommodation':[],
       'startDate': [null],
       'endDate': [null],
-      'maxDistance': [],
-      'children':[''],
+      'maxDistance': [null],
+      'children':[false],
       'numberOfPeople':[]
     }
   )};
 
   submit(){
     this.searchParams = this.form.value as SearchParams;
+    if(!this.form.value['maxDistance']){
+      this.searchParams.maxDistance = 0;
+    }
+    console.log(this.searchParams);
     this.destinationService.getDestinationBySearchParams(this.searchParams as SearchParams).subscribe(
       result => {
         this.form.reset();

@@ -14,4 +14,6 @@ export interface Destination{
     hotels?: Hotel[];
     images?: string[];
     image?: string;
+    gold?: boolean;
+    silver?: boolean;
 }

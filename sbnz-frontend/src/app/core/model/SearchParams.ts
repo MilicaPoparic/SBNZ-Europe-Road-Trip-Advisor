@@ -3,8 +3,8 @@ export interface SearchParams {
     transportation?: string[],
     budget?: string,
     children?: Boolean,
-    numberOfPeople: Number,
-    accommodation: Number,
+    numberOfPeople?: Number,
+    accommodation?: Number,
     startDate?: Date,
     endDate?: Date,
     maxDistance?: Number

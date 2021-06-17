@@ -1,5 +1,7 @@
 <div>
-  <button mat-button (click)="onButtonClicked()">Plan your next trip!</button>
+  <!-- <button mat-button (click)="onButtonClicked()">Plan your next trip!</button> -->
+  <button class="style-1" (click)="onButtonClicked()">Plan your next trip! ⚡</button>
+
   <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
     <div class="controls-top">
       <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
@@ -15,12 +17,27 @@
           <div class="card mb-2">
             <img class="card-img-top" [src]="i.image" alt="Card image cap">
             <div class="card-body">
-              <h4 class="card-title">{{i.name}}</h4>
-              <p class="card-text">Score: {{i.score}}</p>
+              <span>
+              <span class="card-title h4">{{i.name}}</span>
               <a id="goToPage{{i.id}}" class="open_in_new" mat-button href="/destination/{{i.id}}"
                 matTooltip="Open to see details" inline="true">
                 <mat-icon>open_in_new</mat-icon>
               </a>
+            </span>
+            <br>
+              <span>
+                <img class="star" *ngIf="i.gold" src="https://allfreepng.com/storage/images/star%20png%206-medium.png">
+                <span class="h2" *ngIf="i.gold">This is the best option for you!</span>
+              </span>
+              
+              <span>
+                <img class="star" *ngIf="i.silver" src="https://purepng.com/public/uploads/large/purepng.com-silver-starstargeometricallydecagonconcavestardomclipartsilver-1421526502885xmfkb.png">
+                <span class="h2" *ngIf="i.silver">Silver shines like gold!</span>
+
+              </span>
+              
+              <p class="card-text">Score: {{i.score}}</p>
+              
             </div>
           </div>
         </div>

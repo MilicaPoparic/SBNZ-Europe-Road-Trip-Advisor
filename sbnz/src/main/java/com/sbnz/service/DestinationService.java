@@ -132,24 +132,13 @@ public class DestinationService implements ServiceInterface<Destination> {
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
-
-		System.out.println("lalalalala tu sam");
-
 		KieSession kieSession = kieContainer.newKieSession("test-session");
-		System.out.println("lalalalala tu sam");
-
 		kieSession.insert(ru);
-		System.out.println("lalalalala tu sam");
-
 		allDestinations.forEach(kieSession::insert);
-		System.out.println("lalalalala tu sam");
-
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
 		kieSession.fireAllRules();
 		kieSession.dispose();
-		System.out.println("lalalalala tu sam");
-
 		Collections.sort(allDestinations);
-		System.out.println("lalalalala tu sam");
 
 		return allDestinations;
 	}
@@ -196,7 +185,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 			kieSession.getAgenda().getAgendaGroup("children").setFocus();
 			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		}
-		if (searchDTO.maxDistance != null) {
+		if (searchDTO.maxDistance != 0) {
 			kieSession.getAgenda().getAgendaGroup("distance").setFocus();
 			logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 		}
