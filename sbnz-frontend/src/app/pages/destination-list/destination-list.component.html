@@ -33,7 +33,8 @@
         <th mat-header-cell *matHeaderCellDef> Actions </th>
         <td mat-cell *matCellDef="let element">
           <button class="mat-button mat-success" (click)="addHotel(element.id)">New hotel</button>
-          <!-- <button mat-icon-button id="deleteUser{{element.id}}" color="warn"><mat-icon class="material-icons"  inline="true" (click)="confirmDialog(element.id)">delete</mat-icon></button> -->
+          <!--
+               <button mat-icon-button id="deleteUser{{element.id}}" color="warn"><mat-icon class="material-icons"  inline="true" (click)="confirmDialog(element.id)">delete</mat-icon></button> -->
       </td>
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
