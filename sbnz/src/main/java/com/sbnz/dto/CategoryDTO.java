@@ -12,6 +12,7 @@ public class CategoryDTO {
 
 	public CategoryDTO(Long id, String name, Boolean active) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.active = active;
 	}

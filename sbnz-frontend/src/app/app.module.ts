@@ -14,7 +14,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ForYouListComponent } from './pages/for-you-list/for-you-list.component';
 import { PersonalizeSearchComponent } from './pages/personalize-search/personalize-search.component';
-
+import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
 
 @NgModule({
   declarations: [
@@ -30,6 +30,7 @@ import { PersonalizeSearchComponent } from './pages/personalize-search/personali
     AuthModule,
     MaterialModule,
     ToastrModule.forRoot(),
+    GeoapifyGeocoderAutocompleteModule.withConfig('d7bf4986e27749f4b974b51be1ea926d'),
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}],
   bootstrap: [AppComponent],

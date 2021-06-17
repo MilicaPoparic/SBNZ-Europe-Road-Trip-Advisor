@@ -6,32 +6,59 @@
       <!-- <div class='welcome'>Sign up</div> -->
       <!-- <div class='subtitle'>Sign up</div>  -->
       <form [formGroup]="form" (ngSubmit)="addUser()">
-      <div class='input-fields'>
-        <input type='text' placeholder='Firstname' class='input-line full-width' formControlName = "firstName">
-        <small class="text-danger" id="usernameError"  *ngIf="form.controls.firstName.touched && form.controls.firstName.errors?.required">
-        This field can't be empty!</small>
-        <input type='text' placeholder='Lastname' class='input-line full-width' formControlName = "lastName">
-        <small class="text-danger" id="usernameError"  *ngIf="form.controls.lastName.touched && form.controls.lastName.errors?.required">
-        This field can't be empty!</small>
-        <input type='email' placeholder='Email' class='input-line full-width' formControlName = "email">
-        <small class="text-danger" id="usernameError"  *ngIf="form.controls.email.touched && form.controls.email.errors?.required">
-        This field can't be empty!</small>           
-        <input type='password' placeholder='Password' class='input-line full-width' formControlName = "password">
-        <small class="text-danger" id="passwordError" *ngIf="form.controls.password.touched && form.controls.password.errors?.required">
-           This field can't be empty!</small>
-        <input type='password' placeholder='Repeat password' class='input-line full-width' formControlName = "repeatPassword">
-        <small class="text-danger" id="passwordError" *ngIf="form.controls.repeatPassword.touched && form.controls.repeatPassword.errors?.required">
+        <div class='input-fields'>
+          <input type='text' placeholder='Firstname' class='input-line full-width' formControlName="firstName">
+          <small class="text-danger" id="usernameError"
+            *ngIf="form.controls.firstName.touched && form.controls.firstName.errors?.required">
             This field can't be empty!</small>
-            <mat-form-field><mat-select (selectionChange)="changeProfession($event)" placeholder="Select profession" >
+          <input type='text' placeholder='Lastname' class='input-line full-width' formControlName="lastName">
+          <small class="text-danger" id="usernameError"
+            *ngIf="form.controls.lastName.touched && form.controls.lastName.errors?.required">
+            This field can't be empty!</small>
+          <input type='email' placeholder='Email' class='input-line full-width' formControlName="email">
+          <small class="text-danger" id="usernameError"
+            *ngIf="form.controls.email.touched && form.controls.email.errors?.required">
+            This field can't be empty!</small>
+          <input type='password' placeholder='Password' class='input-line full-width' formControlName="password">
+          <small class="text-danger" id="passwordError"
+            *ngIf="form.controls.password.touched && form.controls.password.errors?.required">
+            This field can't be empty!</small>
+          <input type='password' placeholder='Repeat password' class='input-line full-width'
+            formControlName="repeatPassword">
+          <small class="text-danger" id="passwordError"
+            *ngIf="form.controls.repeatPassword.touched && form.controls.repeatPassword.errors?.required">
+            This field can't be empty!</small>
+          <mat-form-field>
+            <mat-select (selectionChange)="changeProfession($event)" placeholder="Select profession">
               <mat-option *ngFor="let f of professionArray" [value]="f">{{f}}</mat-option>
-          </mat-select></mat-form-field>
-        
-       </div>
-       <!-- TODO: dodati polja za lokaciju, datum rodjenja i profesiju i select za biranje interesovanja -->
-
-       </form>
+            </mat-select>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Choose a birth date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="todayDate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker" id="datePickerToggleBtn"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.controls.dateOfBirth.touched && form.controls.dateOfBirth.invalid">
+              <span *ngIf="form.controls.dateOfBirth.errors?.required">This field is mandatory.</span>
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Interests</mat-label>
+            <mat-select (valueChange)="onSelectionInterests($event)" multiple>
+              <mat-option *ngFor="let i of interests" [value]="i">
+                {{i.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <geoapify-geocoder-autocomplete (placeSelect)="placeSelected($event)">
+          </geoapify-geocoder-autocomplete>
+        </div>
+      
       <div class='spacing'>Already have an account? <span class='highlight'><a href="/">Sign in</a></span></div>
-      <div><button type="submit" class='ghost-round full-width' [disabled]="form.invalid">Create account</button></div>
+      <div><button type="submit" class='ghost-round full-width'[disabled]="form.invalid">Create account</button></div>
+    </form>
     </div>
   </div>
 </div>

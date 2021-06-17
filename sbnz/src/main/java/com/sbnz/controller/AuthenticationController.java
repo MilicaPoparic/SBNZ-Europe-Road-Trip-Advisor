@@ -101,7 +101,6 @@ public class AuthenticationController {
 	// @Transactional
 	public ResponseEntity<?> addUser(@RequestBody RegisteredUserDTO registeredUserDTO, HttpServletRequest request)
 			throws Exception {
-
 		RegisteredUser registeredUser;
 
 		System.out.println(registeredUserDTO);

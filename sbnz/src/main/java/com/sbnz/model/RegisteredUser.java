@@ -39,6 +39,7 @@ public class RegisteredUser extends User {
 		this.locationLat = locationLat;
 		this.locationLon = locationLon;
 		this.interests = new ArrayList<Category>();
+		System.out.println(list);
 		for (CategoryDTO c : list) {
 			this.interests.add(c.toEntity());
 		}
