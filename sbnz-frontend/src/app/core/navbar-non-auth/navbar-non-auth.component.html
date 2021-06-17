@@ -8,7 +8,9 @@
 	<span>
 		<button *ngIf="!role" id="login" mat-button [routerLink]="['/login']" > Sign in </button>
 		<button *ngIf="!role" id="register" mat-button [routerLink]="['/register']" > Sign up </button>
-		<button *ngIf="role" mat-button [routerLink]="['/profile']" > Profile </button>
+		<button *ngIf="role==='ROLE_REGISTERED_USER'" mat-button [routerLink]="['/profile']" > Profile </button>
+		<button *ngIf="role==='ROLE_ADMIN'" mat-button [routerLink]="['/destinations']" > Destinations </button>
+
 		<button *ngIf="role" mat-button (click)="signOut()" > Sign out </button>
 	</span>
 </mat-toolbar>

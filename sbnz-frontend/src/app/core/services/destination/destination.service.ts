@@ -40,4 +40,9 @@ export class DestinationService {
 	getDestinationBySearchParams(params: SearchParams):Observable<any>{
         return this.http.post(`${environment.baseUrl}/${environment.destination}/filterBySearchParams`, params, {headers: this.headers}).pipe(map(res=>res));
     }
+
+    getAll(){
+        return this.http.get(`${environment.baseUrl}/${environment.destination}`, {headers: this.headers}).pipe(map(res=>res));
+
+    }
 }

@@ -17,6 +17,7 @@ import { PersonalizeSearchComponent } from './pages/personalize-search/personali
 import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';import { ImageSliderComponent } from './pages/destination/image-slider/image-slider.component';
 import { DestitnationDetailsComponent } from './pages/destination/destination-details/destination-details.component';
+import { DestinationListComponent } from './pages/destination-list/destination-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +27,8 @@ import { DestitnationDetailsComponent } from './pages/destination/destination-de
     PersonalizeSearchComponent,
     ProfilePageComponent,
 	DestitnationDetailsComponent,
-    ImageSliderComponent  ],
+    ImageSliderComponent,
+    DestinationListComponent  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

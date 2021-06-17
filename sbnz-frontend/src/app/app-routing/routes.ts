@@ -7,6 +7,7 @@ import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { ForYouListComponent } from '../pages/for-you-list/for-you-list.component';
 import { DestitnationDetailsComponent } from '../pages/destination/destination-details/destination-details.component';import { ProfilePageComponent } from '../pages/profile-page/profile-page.component';
 import { VerificationPageComponent } from '../pages/auth/verification-page/verification-page.component';
+import { DestinationListComponent } from '../pages/destination-list/destination-list.component';
 export const routes: Routes = [
 	{
 		path: '',
@@ -45,5 +46,12 @@ export const routes: Routes = [
 		path:'verification/:token',
 		component:VerificationPageComponent,
 		canActivate: [LoginGuard]
+	},
+	{
+		path:'destinations',
+		component:DestinationListComponent,
+		canActivate: [RoleGuard],
+		data: {expectedRoles: 'ROLE_ADMIN'}
+
 	}
 ];

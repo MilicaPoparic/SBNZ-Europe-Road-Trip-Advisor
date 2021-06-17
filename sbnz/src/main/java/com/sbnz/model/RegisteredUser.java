@@ -21,16 +21,16 @@ public class RegisteredUser extends User {
 		return "RegisteredUser [dateOfBirth=" + dateOfBirth + ", profession=" + profession + ", locationLat="
 				+ locationLat + ", locationLon=" + locationLon + ", interests=" + interests + "]";
 	}
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private Date dateOfBirth;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String profession;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private double locationLat;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private double locationLon;
 	
 	@ManyToMany(fetch = FetchType.EAGER)

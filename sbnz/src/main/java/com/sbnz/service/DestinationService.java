@@ -118,16 +118,25 @@ public class DestinationService implements ServiceInterface<Destination> {
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
+		
+		System.out.println("lalalalala tu sam");
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");
+		System.out.println("lalalalala tu sam");
+
 		kieSession.insert(ru);
+		System.out.println("lalalalala tu sam");
 
 		allDestinations.forEach(kieSession::insert);
+		System.out.println("lalalalala tu sam");
 
-		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		kieSession.fireAllRules();
 		kieSession.dispose();
+		System.out.println("lalalalala tu sam");
 
 		Collections.sort(allDestinations);
+		System.out.println("lalalalala tu sam");
+
 		return allDestinations;
 	}
 
@@ -210,7 +219,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 				+ lat + "," + lon + "&location_around.scale=10km&page=0&size=100";
 
 		final HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer L3cMHzABhAMuiT2atcUo2IHxynCOH74eefpSNiJg");
+		headers.set("Authorization", "Bearer qkVJ57ag0XPVM-JlGnaytrlBtRFnzD_jrDPCqEDO");
 		headers.set("Accept", "application/json");
 
 		// Create a new HttpEntity
