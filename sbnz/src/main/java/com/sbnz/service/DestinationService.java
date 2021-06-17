@@ -31,9 +31,11 @@ import com.google.gson.Gson;
 import com.sbnz.dto.DestinationEventsDTO;
 import com.sbnz.dto.EventDTO;
 import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.Category;
 import com.sbnz.model.Destination;
 import com.sbnz.model.RegisteredUser;
 import com.sbnz.model.Transportation;
+import com.sbnz.repository.CategoryRepository;
 import com.sbnz.repository.DestinationRepository;
 import com.sbnz.repository.RegisteredUserRepository;
 
@@ -42,6 +44,9 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	@Autowired
 	private DestinationRepository destinationRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	@Autowired
 	private RegisteredUserRepository registeredUserRepository;
@@ -71,12 +76,21 @@ public class DestinationService implements ServiceInterface<Destination> {
 		c.setLocationLat(entity.getLocationLat());
 		c.setLocationLon(entity.getLocationLon());
 		c.setLocalFood(entity.getLocalFood());
-		c.setCategories(entity.getCategories());
 		c.setHotels(entity.getHotels());
 		c.setScore(entity.getScore());
 		c.setTransportation(entity.getTransportation());
-		c.setTrending(entity.getTrending());
+		c.setTrending(false);
 		c.setActive(true);
+		List<Category> setterList = new ArrayList<Category>();
+		List<Category> categories = categoryRepository.findAll();
+		for (Category category : entity.getCategories()) {
+			for (Category category2 : categories) {
+				if (category.getName().equals(category2.getName())) {
+					setterList.add(category2);
+				}
+			}
+		}
+		c.setCategories(setterList);
 		c = destinationRepository.save(c);
 		return c;
 	}
@@ -118,7 +132,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
 		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
-		
+
 		System.out.println("lalalalala tu sam");
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");

@@ -18,8 +18,7 @@ import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-a
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';import { ImageSliderComponent } from './pages/destination/image-slider/image-slider.component';
 import { DestitnationDetailsComponent } from './pages/destination/destination-details/destination-details.component';
 import { DestinationListComponent } from './pages/destination-list/destination-list.component';
-import { AddHotelComponent } from './pages/add-hotel/add-hotel.component';
-@NgModule({
+import { AddDestinationComponent } from './pages/destination/add-destination/add-destination.component';import { AddHotelComponent } from './pages/add-hotel/add-hotel.component';@NgModule({
   declarations: [
     AppComponent,
     NavbarNonAuthComponent,
@@ -30,8 +29,7 @@ import { AddHotelComponent } from './pages/add-hotel/add-hotel.component';
 	DestitnationDetailsComponent,
     ImageSliderComponent,
     DestinationListComponent,
-    AddHotelComponent  ],
-  imports: [
+	AddHotelComponent,    AddDestinationComponent  ],  imports: [
     BrowserModule,
     AppRoutingModule,
     AuthModule,

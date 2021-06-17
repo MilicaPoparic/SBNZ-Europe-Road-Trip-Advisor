@@ -5,6 +5,7 @@ import { User } from '../../model/User';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { SearchParams } from '../../model/SearchParams';
+import { Destination } from '../../model/Destination';
 
 
 @Injectable({
@@ -25,6 +26,10 @@ export class DestinationService {
 
     getOne(id: any):Observable<any>{
         return this.http.get(`${environment.baseUrl}/${environment.destination}/`+id, {headers: this.headers}).pipe(map(res=>res));
+    }
+
+    create(destination: Destination):Observable<any>{
+        return this.http.post(`${environment.baseUrl}/${environment.destination}/`, destination, {headers: this.headers}).pipe(map(res=>res));
     }
 
     getDestination():Observable<any>{

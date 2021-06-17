@@ -60,6 +60,7 @@ public class DestinationController {
 	@RequestMapping(method = RequestMethod.POST)
 	//@PreAuthorize("hasRole('REGISTERED_USER')")
 	public ResponseEntity<DestinationDTO> createDestination(@RequestBody DestinationDTO destinationDTO) {
+		System.out.println("gde si");
 		Destination destination;
 //		if (!this.validateDestinationDTO(DestinationDTO)) {
 //			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -100,7 +100,6 @@ export class RegisterPageComponent implements OnInit {
   }
 
   onSelectionInterests(event: any) {
-    console.log(event);
     this.form.controls['interests'].setValue(event);
   }
 
