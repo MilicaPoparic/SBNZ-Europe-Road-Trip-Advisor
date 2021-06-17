@@ -27,7 +27,7 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -66,12 +66,12 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		List<Category> categories = categoryRepository.findAll();
 		for (Category category : entity.getInterests()) {
 			for (Category category2 : categories) {
-				if(category.getName().equals(category2.getName())) {
+				if (category.getName().equals(category2.getName())) {
 					ruser.getInterests().add(category2);
 				}
 			}
 		}
-		
+
 		return repository.save(ruser);
 	}
 
@@ -92,7 +92,7 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 			u.setEmail(oldEmail);
 		}
 		u.setFirstName(entity.getFirstName());
-		u.setLastName(entity.getLastName());	
+		u.setLastName(entity.getLastName());
 		u.setDateOfBirth(entity.getDateOfBirth());
 		u.setEmail(entity.getEmail());
 		u.setLocationLat(entity.getLocationLat());
@@ -101,8 +101,10 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		List<Category> categories = categoryRepository.findAll();
 		for (Category category : entity.getInterests()) {
 			for (Category category2 : categories) {
-				if(category.getName().equals(category2.getName())) {
-					u.getInterests().add(category2);
+				if (category.getName().equals(category2.getName())) {
+					if (!u.getInterests().contains(category2)) {
+						u.getInterests().add(category2);
+					}
 				}
 			}
 		}
