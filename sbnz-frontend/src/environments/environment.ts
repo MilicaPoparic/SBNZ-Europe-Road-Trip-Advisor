@@ -13,7 +13,8 @@ export const environment = {
   admin:'api/admin',
   registeredUser:'api/registered_user',
   user:'api/user',
-  destination: 'api/destination'
+  destination: 'api/destination',
+  category: 'api/category'
 };
 
 /*

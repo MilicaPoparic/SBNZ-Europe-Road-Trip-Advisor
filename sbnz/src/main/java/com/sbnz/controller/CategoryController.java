@@ -30,7 +30,7 @@ import com.sbnz.service.RegisteredUserService;
 public class CategoryController {
 
 	@Autowired
-	private CategoryService CategoryService;
+	private CategoryService categoryService;
 
 	@Autowired
 	private RegisteredUserService registeredUserService;
@@ -41,14 +41,14 @@ public class CategoryController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-		List<Category> Categories = CategoryService.findAll();
+		List<Category> Categories = categoryService.findAll();
 
 		return new ResponseEntity<>(toCategoryDTOList(Categories), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
-		Category category = CategoryService.findOne(id);
+		Category category = categoryService.findOne(id);
 		if (category == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -75,7 +75,7 @@ public class CategoryController {
 //		}
 		try {
 			category = categoryDTO.toEntity();
-			category = CategoryService.create(category);
+			category = categoryService.create(category);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -91,7 +91,7 @@ public class CategoryController {
 //		if (!this.validateCategoryDTO(categoryDTO))
 //			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		try {
-			category = CategoryService.update(categoryDTO.toEntity(), id);
+			category = categoryService.update(categoryDTO.toEntity(), id);
 		} catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
@@ -104,7 +104,7 @@ public class CategoryController {
 	@CrossOrigin(origins = "http://localhost:8080")
 	public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
 		try {
-			CategoryService.delete(id);
+			categoryService.delete(id);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}

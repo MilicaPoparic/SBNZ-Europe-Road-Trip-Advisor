@@ -14,16 +14,15 @@ export class RoleGuard implements CanActivate {
 
 	canActivate(route: ActivatedRouteSnapshot): boolean {
 		const expectedRoles: string = route.data.expectedRoles;
-	
-		const token = localStorage.getItem('user') || '';
+		const token = sessionStorage.getItem('user');
 		const jwt: JwtHelperService = new JwtHelperService();
-		let accessToken = JSON.parse(token);
 		if (!token) {
 			this.router.navigate(['/login']);
 			return false;
 		}
+		let decodedItem = JSON.parse(token);
 		const roles: string[] = expectedRoles.split('|', 2);
-		const info = jwt.decodeToken(token);
+		const info = jwt.decodeToken(decodedItem.accessToken);
 
 		if (roles.indexOf(info.role) === -1) {
 			this.router.navigate(['/']);

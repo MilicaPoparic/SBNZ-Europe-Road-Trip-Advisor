@@ -1,3 +1,5 @@
+import { Category } from "./Category";
+
 export interface User{
     id?: number;
     firstName?: string;
@@ -6,4 +8,8 @@ export interface User{
     password?: string;
     active?: boolean;
     verified?: boolean;
+    locationLat?: number;
+    locationLon?: number;
+    dateOfBirth?: Date;
+    interests?: Category[]; 
 }

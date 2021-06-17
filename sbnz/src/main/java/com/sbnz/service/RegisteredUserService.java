@@ -1,5 +1,6 @@
 package com.sbnz.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -9,8 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sbnz.model.Authority;
+import com.sbnz.model.Category;
 import com.sbnz.model.RegisteredUser;
 import com.sbnz.repository.AuthorityRepository;
+import com.sbnz.repository.CategoryRepository;
 import com.sbnz.repository.RegisteredUserRepository;
 
 @Service
@@ -22,6 +25,9 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 
+	@Autowired
+	private CategoryRepository categoryRepository;
+	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
@@ -47,7 +53,6 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		ruser.setLastName(entity.getLastName());
 		ruser.setEmail(entity.getEmail());
 		ruser.setDateOfBirth(entity.getDateOfBirth());
-		ruser.setInterests(entity.getInterests());
 		ruser.setLocationLat(entity.getLocationLat());
 		ruser.setLocationLon(entity.getLocationLon());
 		ruser.setProfession(entity.getProfession());
@@ -57,6 +62,16 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		Set<Authority> set = new HashSet<Authority>();
 		set.add(authorityRepository.findByRole("ROLE_REGISTERED_USER"));
 		ruser.setAuthority(set);
+		ruser.setInterests(new ArrayList<Category>());
+		List<Category> categories = categoryRepository.findAll();
+		for (Category category : entity.getInterests()) {
+			for (Category category2 : categories) {
+				if(category.getId() == category2.getId()) {
+					ruser.getInterests().add(category2);
+					System.out.println("tus mo dosli");
+				}
+			}
+		}
 		return repository.save(ruser);
 	}
 
