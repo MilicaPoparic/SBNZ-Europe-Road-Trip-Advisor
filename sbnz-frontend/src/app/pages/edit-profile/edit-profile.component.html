@@ -1,0 +1,62 @@
+<form class="reactiveForm" [formGroup]="form"  class="form">
+    <div class="example-container">
+    
+    <mat-form-field appearance="fill">
+        <mat-label>First name</mat-label>
+        <input id="firstName" matInput formControlName="firstName" required>
+        <mat-error *ngIf="form.controls.firstName.touched && form.controls.firstName.invalid">
+            <span *ngIf="form.controls.firstName.errors?.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+        <mat-label>Last name</mat-label>
+        <input id="lastName" matInput formControlName="lastName" required>
+        <mat-error *ngIf="form.controls.lastName.touched && form.controls.lastName.invalid">
+            <span *ngIf="form.controls.lastName.errors?.required">This field is mandatory.</span>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <textarea id="email" matInput formControlName="email" required></textarea>
+        <mat-error *ngIf="form.controls.email.touched && form.controls.email.invalid">
+            <span *ngIf="form.controls.email.errors?.required">This field is mandatory.</span>
+            <span *ngIf="form.controls.email.errors?.pattern">This field is invalid.</span>
+        </mat-error>
+    </mat-form-field>
+    <br>
+    <mat-form-field>
+        <mat-select (selectionChange)="changeProfession($event)" placeholder="Select profession">
+          <mat-option *ngFor="let f of professionArray" [value]="f">{{f}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a birth date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" [max]="todayDate" required>
+        <mat-datepicker-toggle matSuffix [for]="picker" id="datePickerToggleBtn"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="form.controls.dateOfBirth.touched && form.controls.dateOfBirth.invalid">
+          <span *ngIf="form.controls.dateOfBirth.errors?.required">This field is mandatory.</span>
+        </mat-error>
+      </mat-form-field>
+      <br>
+      <mat-form-field appearance="fill">
+        <mat-label>Interests</mat-label>
+        <mat-select (valueChange)="onSelectionInterests($event)" multiple>
+          <mat-option *ngFor="let i of interests" [value]="i">
+            {{i.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <geoapify-geocoder-autocomplete (placeSelect)="placeSelected($event)">
+      </geoapify-geocoder-autocomplete>
+
+    <br>
+    <mat-dialog-actions align="end">
+        <button mat-raised-button (click)="cancel()">Cancel</button>
+        <button type="submit" id="submitBtn" mat-raised-button color="success" (click)="saveChanges()">Save</button>
+    </mat-dialog-actions>
+    </div>
+</form> 

@@ -1,0 +1,26 @@
+img{
+    border-radius: 50%;
+    width:200px;
+    height:200px;
+    vertical-align: middle;
+}
+mat-card{
+    margin-left: 400px;
+    margin-right: 400px;
+}
+mat-card-title{
+    padding-top:20px;
+}
+mat-card-actions{
+    vertical-align: middle;
+}
+.first{
+    text-align:left;
+}
+mat-card-header{
+    justify-content: center;
+    align-items: center;
+}
+button{
+    background-color:rgb(247, 241, 241);
+}

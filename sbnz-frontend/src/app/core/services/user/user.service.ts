@@ -31,4 +31,8 @@ export class UserService {
 		};
 		return this.http.get(`${environment.baseUrl}/${environment.user}/currentUser`, queryParams).pipe(map(res => res));
     }
+
+	editUser(user: User): Observable<any> {
+		return this.http.put(`${environment.baseUrl}/${environment.registeredUser}/${user.id}`, user, {headers: this.headers, responseType: 'json'});
+	}
 }

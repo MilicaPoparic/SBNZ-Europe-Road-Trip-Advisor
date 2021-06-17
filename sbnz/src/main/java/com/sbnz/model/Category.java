@@ -10,6 +10,11 @@ import com.sbnz.dto.CategoryDTO;
 
 @Entity
 public class Category {
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", active=" + active + "]";
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

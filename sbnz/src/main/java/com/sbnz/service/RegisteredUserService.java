@@ -66,12 +66,12 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 		List<Category> categories = categoryRepository.findAll();
 		for (Category category : entity.getInterests()) {
 			for (Category category2 : categories) {
-				if(category.getId() == category2.getId()) {
+				if(category.getName().equals(category2.getName())) {
 					ruser.getInterests().add(category2);
-					System.out.println("tus mo dosli");
 				}
 			}
 		}
+		
 		return repository.save(ruser);
 	}
 
@@ -79,7 +79,7 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 	public RegisteredUser update(RegisteredUser entity, Long id) throws Exception {
 		RegisteredUser u = repository.findById(id).orElse(null);
 		if (u == null)
-			throw new Exception("User doesn't registered");
+			throw new Exception("User isn't registered");
 		String oldEmail = u.getEmail();
 		RegisteredUser checkRegisteredUser;
 		if (!oldEmail.equals(entity.getEmail())) {
@@ -92,8 +92,20 @@ public class RegisteredUserService implements ServiceInterface<RegisteredUser> {
 			u.setEmail(oldEmail);
 		}
 		u.setFirstName(entity.getFirstName());
-		u.setLastName(entity.getLastName());
-		// u.setPassword(passwordEncoder.encode(entity.getPassword()));
+		u.setLastName(entity.getLastName());	
+		u.setDateOfBirth(entity.getDateOfBirth());
+		u.setEmail(entity.getEmail());
+		u.setLocationLat(entity.getLocationLat());
+		u.setLocationLon(entity.getLocationLon());
+		u.setProfession(entity.getProfession());
+		List<Category> categories = categoryRepository.findAll();
+		for (Category category : entity.getInterests()) {
+			for (Category category2 : categories) {
+				if(category.getName().equals(category2.getName())) {
+					u.getInterests().add(category2);
+				}
+			}
+		}
 		return repository.save(u);
 	}
 

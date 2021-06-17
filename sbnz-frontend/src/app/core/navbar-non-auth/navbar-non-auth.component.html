@@ -6,7 +6,9 @@
 		</a>
 	</div>
 	<span>
-		<button id="login" mat-button [routerLink]="['/login']" > Sign in </button>
-		<button id="register" mat-button [routerLink]="['/register']" > Sign up </button>
+		<button *ngIf="!role" id="login" mat-button [routerLink]="['/login']" > Sign in </button>
+		<button *ngIf="!role" id="register" mat-button [routerLink]="['/register']" > Sign up </button>
+		<button *ngIf="role" mat-button [routerLink]="['/profile']" > Profile </button>
+		<button *ngIf="role" mat-button (click)="signOut()" > Sign out </button>
 	</span>
 </mat-toolbar>

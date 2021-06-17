@@ -79,9 +79,16 @@ public class AuthenticationController {
 			// Ubaci korisnika u trenutni security kontekst
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
+			
 			// Kreiraj token za tog korisnika
 			User user = (User) authentication.getPrincipal();
 			User dbUser = userRepository.findByEmail(user.getUsername());
+			
+			if(dbUser.getVerified() == false) {
+				userService.loginFailed(authenticationRequest.getUsername());
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			
 			dbUser.setActive(true);
 			userRepository.save(dbUser);
 

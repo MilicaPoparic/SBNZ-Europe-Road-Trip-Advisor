@@ -16,6 +16,11 @@ import com.sbnz.dto.RegisteredUserDTO;
 @Entity
 @DiscriminatorValue("registered_user")
 public class RegisteredUser extends User {
+	@Override
+	public String toString() {
+		return "RegisteredUser [dateOfBirth=" + dateOfBirth + ", profession=" + profession + ", locationLat="
+				+ locationLat + ", locationLon=" + locationLon + ", interests=" + interests + "]";
+	}
 	@Column(nullable = false)
 	private Date dateOfBirth;
 	
