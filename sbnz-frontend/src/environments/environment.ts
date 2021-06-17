@@ -15,7 +15,8 @@ export const environment = {
   user:'api/user',
   destination: 'api/destination',
   category: 'api/category',
-  verification: 'api/verification'
+  verification: 'api/verification',
+  hotel: 'api/hotel'
 };
 
 /*

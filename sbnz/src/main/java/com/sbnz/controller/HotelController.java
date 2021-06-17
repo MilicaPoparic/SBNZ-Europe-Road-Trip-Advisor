@@ -51,6 +51,16 @@ public class HotelController {
 
 		return new ResponseEntity<>(hotel.toDTO(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/{destinationId}", method = RequestMethod.POST)
+	public ResponseEntity<HotelDTO> createHotel(@PathVariable Long destinationId, @RequestBody HotelDTO hotelDTO) {
+		Hotel hotel = hotelService.create(hotelDTO.toEntity(), destinationId);
+		if (hotel == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+		return new ResponseEntity<>(hotel.toDTO(), HttpStatus.OK);
+	}
 
 //	@RequestMapping(value = "/", method = RequestMethod.GET)
 //	public ResponseEntity<Page<HotelDTO>> loadHotelPage(Pageable pageable) {

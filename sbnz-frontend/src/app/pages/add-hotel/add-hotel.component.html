@@ -1,0 +1,25 @@
+<form class="reactiveForm" [formGroup]="form" class="form">
+    <div class="example-container">
+
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input id="name" matInput formControlName="name" required>
+            <mat-error *ngIf="form.controls.name.touched && form.controls.name.invalid">
+                <span *ngIf="form.controls.name.errors?.required">This field is mandatory.</span>
+            </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+            <mat-select (selectionChange)="changeStars($event)" placeholder="Stars number">
+                <mat-option *ngFor="let f of [1,2,3,4,5]" [value]="f">{{f}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-slide-toggle (change)="toggle($event)">Children</mat-slide-toggle>
+        <br>
+        <br>
+        <mat-dialog-actions align="end">
+            <button mat-raised-button (click)="cancel()">Cancel</button>
+            <button type="submit" id="submitBtn" mat-raised-button color="success" (click)="saveHotel()">Save</button>
+        </mat-dialog-actions>
+    </div>
+</form>

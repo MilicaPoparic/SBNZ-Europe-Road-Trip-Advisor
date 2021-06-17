@@ -6,7 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sbnz.model.Destination;
 import com.sbnz.model.Hotel;
+import com.sbnz.repository.DestinationRepository;
 import com.sbnz.repository.HotelRepository;
 
 @Service
@@ -14,6 +16,9 @@ public class HotelService implements ServiceInterface<Hotel> {
 
 	@Autowired
 	private HotelRepository HotelRepository;
+	
+	@Autowired
+	private DestinationRepository destinationRepository;
 
 	@Override
 	public List<Hotel> findAll() {
@@ -65,6 +70,22 @@ public class HotelService implements ServiceInterface<Hotel> {
 
 	public Optional<Hotel> findHotelById(Long id) {
 		return HotelRepository.findByIdAndActive(id, true);
+	}
+
+	public Hotel create(Hotel entity, Long destinationId) {
+		Hotel c = new Hotel();
+		c.setName(entity.getName());
+		c.setStars(entity.getStars());
+		c.setActive(true);
+		c.setChildrenDiscount(entity.getChildrenDiscount());
+		c = HotelRepository.save(c);
+		
+		Destination destination = destinationRepository.findById(destinationId).orElse(null);
+		if (destination != null) {
+			destination.getHotels().add(c);
+			destinationRepository.save(destination);
+		}
+		return c;
 	}
 
 }
