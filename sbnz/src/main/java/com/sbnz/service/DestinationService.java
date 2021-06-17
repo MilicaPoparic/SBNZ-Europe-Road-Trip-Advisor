@@ -210,7 +210,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 				+ lat + "," + lon + "&location_around.scale=10km&page=0&size=100";
 
 		final HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer L3cMHzABhAMuiT2atcUo2IHxynCOH74eefpSNiJg");
+		headers.set("Authorization", "Bearer qkVJ57ag0XPVM-JlGnaytrlBtRFnzD_jrDPCqEDO");
 		headers.set("Accept", "application/json");
 
 		// Create a new HttpEntity

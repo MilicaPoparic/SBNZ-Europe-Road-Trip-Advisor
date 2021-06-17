@@ -33,7 +33,7 @@ export const routes: Routes = [
 	{
 		path: 'destination/:id',
 		component: DestitnationDetailsComponent,
-		// canActivate: [RoleGuard],
-		// data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER'}
+		canActivate: [RoleGuard],
+		data: {expectedRoles: 'ROLE_REGISTERED_USER'}
 	},
 ];

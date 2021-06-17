@@ -1,19 +1,73 @@
-<div >
+<div>
     <app-image-slider [destination]="destination" [imageDTO]="images"></app-image-slider>
     <br>
     <div class="center">
-        <span> 
-            Trending:<span id="numberOfSubscribed">{{destination?.trending}}</span> 
-
-        </span> 
+        <span *ngIf="destination?.trending" >
+            Trending: <i class="material-icons">
+                whatshot
+            </i>
+        </span>
         <div class="edit">
-            <p>Rating: <span id ="averageRate">{{destination?.score | number:'1.0-2'}}</span></p>
+            <p>Rating: <span id="averageRate">{{destination?.score | number:'1.0-2'}}</span></p>
         </div>
         <br>
         <br>
-
     </div>
-    
-</div>       
+    <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+        <div class="controls-top">
+            <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
+            <a class="btn-floating" href="#multi-item-example" data-slide="next"><i
+                    class="fas fa-chevron-right"></i></a>
+        </div>
+        <ol class="carousel-indicators">
+            <li data-target="#multi-item-example" data-slide-to="0" class="active"></li>
+            <li data-target="#multi-item-example" data-slide-to="1"></li>
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            <div class="carousel-item active">
 
-   
+                <div class="card mb-2">
+                    <img class="card-img-top"
+                        src='https://en.unesco.org/sites/default/files/styles/img_688x358/public/featured_photos/infocus_museums_04_0.jpg?itok=dKf0n7ve'
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"> CATEGORIES </h4>
+                        <p class="card-text" *ngFor="let c of destination?.categories">{{c.name}}</p>
+                    </div>
+                </div>
+
+                <div class="card mb-2">
+                    <img class="card-img-top"
+                        src='https://www.gannett-cdn.com/-mm-/05b227ad5b8ad4e9dcb53af4f31d7fbdb7fa901b/c=0-64-2119-1259/local/-/media/USATODAY/USATODAY/2014/08/13/1407953244000-177513283.jpg'
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"> ACCOMMODATION </h4>
+                        <p class="card-text" *ngFor="let h of destination?.hotels">{{h.name}}, stars: {{h.stars}}</p>
+
+                    </div>
+                </div>
+
+                <div class="card mb-2">
+                    <img class="card-img-top"
+                        src='https://i2.wp.com/www.eatthis.com/wp-content/uploads/2016/04/friends-having-pasta-dinner-restaurant-wine.jpg?resize=640%2C360&ssl=1'
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"> LOCAL FOOD </h4>
+                        <p class="card-text" *ngFor="let f of destination?.localFood">{{f}}</p>
+                    </div>
+                </div>
+
+                <div class="card mb-2">
+                    <img class="card-img-top"
+                        src='https://www.oxfordsaudia.com/wp-content/uploads/2018/07/banner-airplane-628x439.jpg'
+                        alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title"> TRANSPORTATION </h4>
+                        <p class="card-text" *ngFor="let t of destination?.transportation">{{t}}</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
