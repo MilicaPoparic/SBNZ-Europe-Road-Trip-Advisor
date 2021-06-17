@@ -15,6 +15,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ForYouListComponent } from './pages/for-you-list/for-you-list.component';
 import { PersonalizeSearchComponent } from './pages/personalize-search/personalize-search.component';
 import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-a
     HomePageComponent,
     ForYouListComponent,
     PersonalizeSearchComponent,
+    ProfilePageComponent,
   ],
   imports: [
     BrowserModule,

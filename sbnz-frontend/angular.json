@@ -32,7 +32,7 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/@geoapify/geocoder-autocomplete/styles/round-borders-dark.css"
+              "node_modules/@geoapify/geocoder-autocomplete/styles/round-borders.css"
             ],
             "scripts": []
           },

@@ -1,0 +1,54 @@
+<div>
+  <mat-card fxLayout="column" fxLayoutAlign="center" class="mat-elevation-z4">
+
+    <mat-card-header>
+      <img class="image" mat-card-image
+        src="https://thumbs.dreamstime.com/b/default-avatar-profile-image-vector-social-media-user-icon-potrait-182347582.jpg"
+        alt="photo">
+    </mat-card-header>
+
+    <mat-card-header>
+      <mat-card-title>{{user?.firstName}} {{user?.lastName}}</mat-card-title>
+      <mat-card-subtitle>{{user?.email}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content align="center">
+      <table align="center">
+        <tr>
+          <td class="first">First Name:</td>
+          <td id="firstName">{{user?.firstName}}</td>
+        </tr>
+        <tr>
+          <td class="first">Last Name:</td>
+          <td id="lastName">{{user?.lastName}}</td>
+        </tr>
+        <tr>
+          <td class="first">Email:</td>
+          <td id="email">{{user?.email}}</td>
+        </tr>
+        <tr>
+          <td class="first">Date of birth:</td>
+          <td >{{user?.dateOfBirth | date}}</td>
+        </tr>
+        <tr>
+          <td class="first">Profession:</td>
+          <td>{{user?.profession}}</td>
+        </tr>
+        <tr>
+          <td class="first">Interests:</td>
+          <td >
+            <span *ngFor="let i of user?.interests">
+              {{i.name}}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button id="editBtn" mat-button (click)="edit()">
+        Edit profile
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+</div>

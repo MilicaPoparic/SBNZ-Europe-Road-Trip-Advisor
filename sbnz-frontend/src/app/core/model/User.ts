@@ -12,4 +12,5 @@ export interface User{
     locationLon?: number;
     dateOfBirth?: Date;
     interests?: Category[]; 
+    profession: string;
 }

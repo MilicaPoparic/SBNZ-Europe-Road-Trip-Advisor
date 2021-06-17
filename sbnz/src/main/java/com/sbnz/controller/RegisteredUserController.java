@@ -54,10 +54,11 @@ public class RegisteredUserController {
 //    }
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	//@PreAuthorize("hasAnyRole('ADMIN', 'REGISTERED_USER')")
-	@CrossOrigin(origins = "http://localhost:8080")
+	@CrossOrigin(origins = "http://localhost:4200")
 	public ResponseEntity<RegisteredUserDTO> updateRegisteredUser(@RequestBody RegisteredUserDTO registeredUserDTO,
 			@PathVariable Long id) {
 
+		System.out.println(registeredUserDTO);
 		RegisteredUser registeredUser;
 		if (!this.validate(registeredUserDTO))
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

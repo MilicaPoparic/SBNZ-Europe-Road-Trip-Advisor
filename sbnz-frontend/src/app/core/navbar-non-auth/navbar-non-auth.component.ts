@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-navbar-non-auth',
@@ -8,9 +9,20 @@ import { Router } from '@angular/router';
 })
 export class NavbarNonAuthComponent implements OnInit {
 
-  constructor(private router: Router) { }
+  @Input() role: any;
+  constructor(private router: Router,private authenticationService: AuthenticationService) { }
 
   ngOnInit(): void {
+    console.log(this.role);
+  }
+
+  signOut(){
+    this.authenticationService.signOut().subscribe(      
+			result => {
+				localStorage.removeItem('user');
+				this.router.navigate(['/login']);
+			}
+		);
   }
 
 }
