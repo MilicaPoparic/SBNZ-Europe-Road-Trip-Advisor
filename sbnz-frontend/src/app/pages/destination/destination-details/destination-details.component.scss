@@ -70,4 +70,12 @@
   .example-full-width{
     width: 70%;
   }
-  
+  img {
+    width: auto;
+    height: auto;
+    vertical-align: middle;
+  }
+ .card-img-top {
+  height: 200px;
+  width: flex;
+ }
