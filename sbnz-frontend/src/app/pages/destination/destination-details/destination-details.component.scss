@@ -1,0 +1,73 @@
+.edit{
+    float: right;
+  }
+  .button-color{
+    color:#576869
+  }
+  #subscribe{
+    background-color:#8dd4dd
+  }
+  #unsubscribe{
+    background-color:#B0BEC5
+  }
+  .mat-card {
+    padding: 18px !important; // less padding than per default
+  }
+  
+  .mat-card-image {
+    width: calc(100% + 36px) !important; // update padding
+    margin: 0 -24px 16px -18px !important; // update padding
+  }
+  
+  .mat-tab-label {
+    font-size: 16px !important;
+  }
+  
+  .mat-card-title {
+    font-size: 30px !important;
+    font-weight: 500 !important;
+  }
+  
+  .mat-card-content {
+    font-size: 20px !important;
+    min-height: 30px; // <--- to remove !!!
+  }
+  
+  .product {
+    margin-bottom: 25px;
+    /*min-width: 180px;
+    text-align: center;*/
+  } 
+  
+  /* desktop button */
+  .mat-card-add-button {
+    border: 1px dashed grey;
+    box-shadow:none !important;
+    cursor:pointer;
+  }
+  
+  img {
+    height: 250px;
+    object-fit: contain;
+  }
+  ::placeholder{
+    font-size: 30px;
+    text-align: start;
+  }
+  span{
+    display: inline;
+  }
+  .center{
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+  }
+  textarea{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+  .example-full-width{
+    width: 70%;
+  }
+  

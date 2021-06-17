@@ -1,0 +1,12 @@
+<mdb-carousel class="carousel slide carousel-fade" [animation]="'fade'">
+    <div class="carousel-caption text-align">
+      <h1>{{destination?.name}}</h1>
+    </div>
+
+    <mdb-carousel-item *ngFor="let s of slides">
+      <div class="view w-100">
+        <img class="d-block w-100" [src]="s">
+        <div class="mask rgba-black-light waves-light" mdbWavesEffect></div>
+      </div>
+    </mdb-carousel-item>
+  </mdb-carousel>
