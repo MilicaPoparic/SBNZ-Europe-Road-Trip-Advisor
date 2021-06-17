@@ -5,13 +5,14 @@ import { LoginPageComponent } from '../pages/auth/login-page/login-page.componen
 import { RegisterPageComponent } from '../pages/auth/register-page/register-page.component';
 import { HomePageComponent } from '../pages/home-page/home-page.component';
 import { ForYouListComponent } from '../pages/for-you-list/for-you-list.component';
+import { DestitnationDetailsComponent } from '../pages/destination/destination-details/destination-details.component';
 
-export const routes :Routes = [
+export const routes: Routes = [
 	{
 		path: '',
 		component: HomePageComponent,
 		canActivate: [RoleGuard],
-		data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER'}
+		data: { expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER' }
 	},
 	{
 		path: 'login',
@@ -27,6 +28,12 @@ export const routes :Routes = [
 		path: 'forYou',
 		component: ForYouListComponent,
 		canActivate: [RoleGuard],
-		data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER'}
-	}
+		data: { expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER' }
+	},
+	{
+		path: 'destination/:id',
+		component: DestitnationDetailsComponent,
+		// canActivate: [RoleGuard],
+		// data: {expectedRoles: 'ROLE_ADMIN|ROLE_REGISTERED_USER'}
+	},
 ];

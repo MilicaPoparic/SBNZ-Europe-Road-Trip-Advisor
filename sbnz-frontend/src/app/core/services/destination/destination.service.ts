@@ -22,7 +22,11 @@ export class DestinationService {
 	constructor(
 		private http: HttpClient
     ) {}
-    
+
+    getOne(id: any):Observable<any>{
+        return this.http.get(`${environment.baseUrl}/${environment.destination}/`+id, {headers: this.headers}).pipe(map(res=>res));
+    }
+
     getDestination():Observable<any>{
         let queryParams = {};
 		queryParams = {

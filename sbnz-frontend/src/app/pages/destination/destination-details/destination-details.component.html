@@ -1,0 +1,19 @@
+<div >
+    <app-image-slider [destination]="destination" [imageDTO]="images"></app-image-slider>
+    <br>
+    <div class="center">
+        <span> 
+            Trending:<span id="numberOfSubscribed">{{destination?.trending}}</span> 
+
+        </span> 
+        <div class="edit">
+            <p>Rating: <span id ="averageRate">{{destination?.score | number:'1.0-2'}}</span></p>
+        </div>
+        <br>
+        <br>
+
+    </div>
+    
+</div>       
+
+   
