@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { ToastrService } from 'ngx-toastr';
 import { AuthenticationService } from '../../../core/services/authentication/authentication.service';
 
@@ -37,7 +38,13 @@ export class LoginPageComponent implements OnInit {
 			result => {
 				this.toastr.success('Successful login!');
 				localStorage.setItem('user', JSON.stringify(result));
-				this.router.navigate(['/']);
+				if(this.checkRole()){
+					this.router.navigate(['/destinations']);
+
+				}else {
+					this.router.navigate(['/']);
+
+				}
 			},
 			error => {
 				console.log(error);
@@ -45,5 +52,20 @@ export class LoginPageComponent implements OnInit {
 			}
 		);
 	}
+
+	checkRole() {
+		const item = localStorage.getItem('user');
+	
+		if (!item) {
+			return;
+		}
+	
+		const jwt: JwtHelperService = new JwtHelperService();
+		let role = jwt.decodeToken(item).role;
+		if(role == 'ROLE_ADMIN') {
+			return true;
+		}
+		return false;
+	  }
 
 }

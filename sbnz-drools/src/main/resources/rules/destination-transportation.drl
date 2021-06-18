@@ -1,0 +1,53 @@
+//created on: May 16, 2021
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.model.Destination;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
+
+rule "Add points to destinations without selected transportation, but have it near them"
+    agenda-group "transportation"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation)
+        $d1: Destination(transportation not contains $transport, $lat1: locationLat, $lon1: locationLon)
+        
+        Number(intValue >= 1) from accumulate(
+            Destination($d2: this,
+                this != $d1, 
+                transportation contains $transport,
+                $lat2: locationLat,
+                $lon2: locationLon,
+                Utility.distance($lat1, $lon1, $lat2, $lon2) < 5000.0             
+            ),
+            count($d2)
+        )
+    then
+		modify($d1) {
+			setScore($d1.getScore() + 2);
+        }		
+        System.out.println("2 points goes to "+$d1.getName()+" for having alternative transportation type: "+$transport+" within a radius of 50km.");	
+        
+end
+
+rule "Add points to destinations with selected transportation"
+    agenda-group "transportation"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($transport: transportation)
+        $destination: Destination(transportation contains $transport)
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5);
+        }		
+        System.out.println("5 points goes to "+$destination.getName()+" for having transportation type: "+$transport);	
+        
+end

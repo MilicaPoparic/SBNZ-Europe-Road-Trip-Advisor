@@ -25,6 +25,7 @@ export class AddDestinationComponent implements OnInit {
   locationLat!: any;
   locationLon!: any;
   city!: any;
+  images: string[] = [];
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -54,11 +55,13 @@ export class AddDestinationComponent implements OnInit {
       'hotels': [''],
       'categories': [''],
       'name':[''],
+      'images':[]
     }
     )
   };
 
   submit() {
+    this.form.value['images'] = this.images;
     this.destination = this.form.value as Destination;
     this.destination.locationLat = this.locationLat;
     this.destination.locationLon = this.locationLon;
@@ -95,6 +98,12 @@ export class AddDestinationComponent implements OnInit {
     this.locationLat = place.properties.lat;
     this.locationLon = place.properties.lon;
     // this.city = place.properties.address_line1 + ' ' + place.properties.address_line2;
+  }
+
+  addImage(){
+    this.images.push(this.form.value['images']);
+    console.log(this.images);
+    this.form.value['images'] = [''];
   }
 
 

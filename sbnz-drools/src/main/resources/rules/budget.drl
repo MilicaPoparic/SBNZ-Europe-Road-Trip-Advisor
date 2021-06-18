@@ -1,0 +1,117 @@
+//created on: May 16, 2021
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.model.Destination;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
+
+
+rule "Predict user's budget based on profession (student)"
+    agenda-group "budget"
+    no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser(profession == "student")
+    	$search: SearchDTO($budget: budget)  
+    	eval($budget == null)
+    then
+		modify($search) {
+			setBudget("medium");	
+	    }
+	    System.out.println("Predicted budget is medium");	
+end
+
+rule "Predict user's budget based on profession (employed)"
+    agenda-group "budget"
+    no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser(profession=="employed")
+    	$search: SearchDTO($budget: budget)  
+    	eval($budget == null)
+    then
+		modify($search) {
+			setBudget("high");	
+	    }
+	    System.out.println("Predicted budget is high");	
+end
+
+rule "Predict user's budget based on profession (unemployed)"
+    agenda-group "budget"
+    no-loop true
+	lock-on-active true
+    when
+        $user: RegisteredUser(profession=="unemployed")
+    	$search: SearchDTO($budget: budget)
+    	eval($budget == null)
+    then
+		modify($search) {
+			setBudget("low");	
+	    }	
+	    System.out.println("Predicted budget is low");
+end
+
+rule "Add points to destinations with high budget"
+    agenda-group "budget"
+    no-loop true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "high")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLon)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+    	eval($estimatedBudget > 2500)
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+	    }
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - high, estimated budget: "+$estimatedBudget +"e");	
+       
+end
+
+rule "Add points to destinations with medium budget"
+    agenda-group "budget"
+    no-loop true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "medium")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLat)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+        eval($estimatedBudget < 2500 && $estimatedBudget > 1000)
+	
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+	    }
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - medium, estimated budget: "+$estimatedBudget +"e");	
+end
+
+
+rule "Add points to destinations with low budget"
+    agenda-group "budget"
+    no-loop true
+    when
+        $search: SearchDTO($transport: transportation, $numberOfPeople: numberOfPeople, budget == "low")  
+        $destination: Destination($lat1: locationLat, $lon1: locationLon)
+        $user: RegisteredUser($userLat: locationLat, $userLon: locationLon)
+    
+    	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
+    	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
+    	eval($estimatedBudget < 2500)
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 10);	
+		}
+	    System.out.println("10 points goes to "+$destination.getName()+" for fitting into user's budget - low, estimated budget: "+$estimatedBudget +"e");	
+       
+end
+

@@ -111,6 +111,7 @@ public class DestinationService implements ServiceInterface<Destination> {
 			}
 		}
 		c.setCategories(setterList);
+		c.setImages(entity.getImages());
 		c = destinationRepository.save(c);
 		return c;
 	}

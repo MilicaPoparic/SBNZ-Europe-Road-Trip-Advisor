@@ -29,6 +29,13 @@
             </mat-select>
         </mat-form-field>
         <br>
+        <mat-form-field appearance="fill">
+            <mat-label>Images</mat-label>
+            <input matInput formControlName="images">
+        </mat-form-field>
+        <button mat-button (click)="addImage()">Add</button>
+
+        <br>
         <br>
         <br>
         <mat-dialog-actions align="end">

@@ -1,0 +1,29 @@
+//created on: May 16, 2021
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.model.Destination;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
+
+rule "Add points to destinations with selected local food"
+	agenda-group "food"
+	no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($food: localFood)
+        $destination: Destination($destinationFood: localFood)
+        accumulate( LocalFood( $f: this , this memberOf $destinationFood) from $food,
+        			 $foodList: collectList( $f ))
+    then
+		modify($destination) {
+			setScore($destination.getScore() + 5*$foodList.size());	
+			
+        }		
+        System.out.println(""+5*$foodList.size()+" points goes to "+$destination.getName()+" for having user's food options");
+end

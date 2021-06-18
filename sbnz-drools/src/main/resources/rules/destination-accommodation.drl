@@ -1,0 +1,47 @@
+//created on: May 16, 2021
+package rules
+
+//list any import classes here.
+import com.sbnz.helpers.Utility;
+import com.sbnz.model.RegisteredUser;
+import com.sbnz.model.Destination;
+import com.sbnz.model.Category;
+import com.sbnz.model.Hotel;
+import com.sbnz.dto.SearchDTO;
+import com.sbnz.model.LocalFood;
+import com.sbnz.model.Transportation;
+
+
+rule "Add points to destinations with wanted accommodation level"
+    agenda-group "accommodation"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($accommodation: accommodation)
+        $destination: Destination($hotels : hotels)
+        accumulate( Hotel( $h: this , stars == $accommodation) from $hotels,
+        			 $hotelsWithAccommodation: collectList( $h ))
+    then	
+		modify($destination) {
+			setScore($destination.getScore() + 5*$hotelsWithAccommodation.size());	
+        }
+       System.out.println(""+5*$hotelsWithAccommodation.size()+" points goes to "+$destination.getName()+" for having hotels with "+$accommodation+" stars");	
+end
+
+rule "Add points to destinations with hotels which have children discount if user has children"
+    agenda-group "children"
+    no-loop true
+	lock-on-active true
+    when
+        $search: SearchDTO($children: children)
+        $destination: Destination($hotels : hotels)
+        accumulate( Hotel( $h: this , childrenDiscount == $children) from $hotels,
+        			 $hotelsWithDiscount: collectList( $h ))
+        eval ($children == true)
+    then  	
+		modify($destination) {
+			setScore($destination.getScore() + 5*$hotelsWithDiscount.size());	
+	    }
+		System.out.println(""+5*$hotelsWithDiscount.size()+" points goes to "+$destination.getName()+" for having hotels with children discount");
+        		
+end
