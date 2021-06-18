@@ -1,0 +1,22 @@
+package cep
+
+import com.sbnz.dto.UserFavoriteDestinationDTO;
+import com.sbnz.event.DestinationAccessEvent;
+
+rule "3 or more destination access in 15 minutes with same username"
+	agenda-group "destination-access"
+    when
+        $a1: UserFavoriteDestinationDTO($username: username, $destination: destination)
+        Number(intValue >= 3) from accumulate(
+            $a2: UserFavoriteDestinationDTO(
+                this != $a1, 
+                username == $username,
+                destination == $destination
+            ) over window:time( 15m ),
+            count($a2)
+        )
+        not (DestinationAccessEvent(username == $username, destination == $destination))
+    then
+        insert(new DestinationAccessEvent($username, $destination));
+        System.out.println("Destination multiple access in 15 minutes: " + $destination);
+end

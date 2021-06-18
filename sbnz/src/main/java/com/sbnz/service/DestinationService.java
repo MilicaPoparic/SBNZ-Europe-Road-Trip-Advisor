@@ -3,14 +3,17 @@ package com.sbnz.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.kie.api.runtime.ClassObjectFilter;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.rule.QueryResults;
@@ -22,6 +25,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -31,6 +35,8 @@ import com.google.gson.Gson;
 import com.sbnz.dto.DestinationEventsDTO;
 import com.sbnz.dto.EventDTO;
 import com.sbnz.dto.SearchDTO;
+import com.sbnz.dto.UserFavoriteDestinationDTO;
+import com.sbnz.event.DestinationAccessEvent;
 import com.sbnz.model.Category;
 import com.sbnz.model.Destination;
 import com.sbnz.model.RegisteredUser;
@@ -54,6 +60,9 @@ public class DestinationService implements ServiceInterface<Destination> {
 	@Autowired
 	private KieContainer kieContainer;
 
+	@Autowired
+	private KieSessionService kieSessionService;
+
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
@@ -65,7 +74,18 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	@Override
 	public Destination findOne(Long id) {
-		return destinationRepository.findByIdAndActive(id, true).orElse(null);
+		System.out.println("usli smo u metodu");
+		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+		String username = currentUser.getName();
+		Destination destination = destinationRepository.findByIdAndActive(id, true).orElse(null);
+		UserFavoriteDestinationDTO favoriteDestination = new UserFavoriteDestinationDTO(username,
+				destination.getName());
+		KieSession kieSession = kieSessionService.getCepSession();
+		kieSession.insert(favoriteDestination);
+		kieSession.getAgenda().getAgendaGroup("destination-access").setFocus();
+		System.out.println("Favorite destination rules fired!");
+		kieSession.fireAllRules();
+		return destination;
 	}
 
 	@Override
@@ -130,7 +150,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
-		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		kieSession.insert(ru);
@@ -138,6 +157,20 @@ public class DestinationService implements ServiceInterface<Destination> {
 		kieSession.getAgenda().getAgendaGroup("default").setFocus();
 		kieSession.fireAllRules();
 		kieSession.dispose();
+		KieSession cepSession = kieSessionService.getCepSession();
+		cepSession.getAgenda().getAgendaGroup("destination-access").setFocus();
+		Collection<?> destinationAccessEvents = cepSession
+				.getObjects(new ClassObjectFilter(DestinationAccessEvent.class));
+		Iterator<?> iterator = destinationAccessEvents.iterator();
+		while (iterator.hasNext()) {
+			DestinationAccessEvent ev = (DestinationAccessEvent) iterator.next();
+			for (Destination dest : allDestinations) {
+				if (ev.getDestination().equals(dest.getName()) && ev.getUsername().equals(username)) {
+					dest.setScore(dest.getScore() + 20);
+				}
+			}
+		}
+
 		Collections.sort(allDestinations);
 
 		return allDestinations;
@@ -147,7 +180,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
 		RegisteredUser ru = registeredUserRepository.findByEmailAndActive(username, true);
-		System.out.println(ru.getEmail());
 		List<Destination> allDestinations = findAll();
 
 		KieSession kieSession = kieContainer.newKieSession("test-session");

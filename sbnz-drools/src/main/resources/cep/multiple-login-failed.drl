@@ -1,4 +1,4 @@
-package rules
+package cep
 
 import com.sbnz.dto.LoginEventDTO;
 
