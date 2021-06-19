@@ -177,6 +177,139 @@ public class DestinationService implements ServiceInterface<Destination> {
 		return allDestinations;
 	}
 
+	public ArrayList<Destination> reportForChildrenDiscount() {
+		System.out.println("servis macko");
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults destinationsForFamilies = kieSession.getQueryResults("Get destinations with children discount",
+				true);
+		for (QueryResultsRow queryResult : destinationsForFamilies) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForTrending() {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults trendingDestinations = kieSession.getQueryResults("Get trending destination", true);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		for (QueryResultsRow queryResult : trendingDestinations) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForCategory(String category) {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults destinationsWithCategory = kieSession.getQueryResults("Get destinations with selected category",
+				category);
+		for (QueryResultsRow queryResult : destinationsWithCategory) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForTransportation(String transport) {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults transportationList = kieSession.getQueryResults(
+				"Get destination with selected transportation type", Transportation.valueOf(transport));
+		for (QueryResultsRow queryResult : transportationList) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForMediterranean() {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults mediterranean = kieSession.getQueryResults("Get mediterranean destinations");
+		for (QueryResultsRow queryResult : mediterranean) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForNorthEurope() {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults northEurope = kieSession.getQueryResults("Get north europe destinations");
+		for (QueryResultsRow queryResult : northEurope) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForEastEurope() {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults eastEurope = kieSession.getQueryResults("Get eastern europe destinations");
+		for (QueryResultsRow queryResult : eastEurope) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
+	public ArrayList<Destination> reportForBalkan() {
+		List<Destination> allDestinations = findAll();
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		allDestinations.forEach(kieSession::insert);
+		ArrayList<Destination> destinations = new ArrayList<Destination>();
+		kieSession.getAgenda().getAgendaGroup("default").setFocus();
+		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
+		QueryResults balkan = kieSession.getQueryResults("Get balkan destinations");
+		for (QueryResultsRow queryResult : balkan) {
+			Destination d = (Destination) queryResult.get("$destinations");
+			destinations.add(d);
+		}
+		kieSession.dispose();
+		return destinations;
+	}
+
 	public List<Destination> filterBySearchParams(SearchDTO searchDTO) throws JSONException, ParseException {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username = ((UserDetails) principal).getUsername();
@@ -236,12 +369,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 		kieSession.getAgenda().getAgendaGroup("events").setFocus();
 		logger.info("Filtering destinations - fired: " + kieSession.fireAllRules());
 
-		QueryResults trendingDestinations = kieSession.getQueryResults("Get trending destination", true);
-
-		for (QueryResultsRow queryResult : trendingDestinations) {
-			Destination d = (Destination) queryResult.get("$destinations");
-			System.out.println(d.getName() + " trending");
-		}
 		kieSession.dispose();
 
 		Collections.sort(allDestinations);

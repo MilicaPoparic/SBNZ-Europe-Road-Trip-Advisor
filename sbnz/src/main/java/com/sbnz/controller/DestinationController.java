@@ -47,20 +47,57 @@ public class DestinationController {
 		return new ResponseEntity<>(destination.toDTO(), HttpStatus.OK);
 	}
 
-//	@RequestMapping(value = "/", method = RequestMethod.GET)
-//	public ResponseEntity<Page<DestinationDTO>> loadDestinationPage(Pageable pageable) {
-//		Page<Destination> Destinations = DestinationService.findAll(pageable);
-//		if (Destinations == null) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		Page<DestinationDTO> DestinationDTO = toDestinationDTOPage(Destinations);
-//		return new ResponseEntity<>(DestinationDTO, HttpStatus.OK);
-//	}
+	@RequestMapping(value = "/trendingDestinations", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getTrendingDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForTrending();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/childrenDiscount", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getChildrenDiscountDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForChildrenDiscount();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/category/{category}", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getDestinationsByCat(@PathVariable String category) {
+		ArrayList<Destination> destinations = destinationService.reportForCategory(category);
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/transportation/{t}", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getDestinationsByTransportation(@PathVariable String t) {
+		ArrayList<Destination> destinations = destinationService.reportForTransportation(t);
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/mediterranean", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getMediterraneanDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForMediterranean();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/eastEurope", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getEastEuropeDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForEastEurope();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/northEurope", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getNorthEuropeDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForNorthEurope();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/balkan", method = RequestMethod.GET)
+	public ResponseEntity<List<DestinationDTO>> getBalkanDestinations() {
+		ArrayList<Destination> destinations = destinationService.reportForBalkan();
+		return new ResponseEntity<>(toDestinationDTOList(destinations), HttpStatus.OK);
+	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	//@PreAuthorize("hasRole('REGISTERED_USER')")
 	public ResponseEntity<DestinationDTO> createDestination(@RequestBody DestinationDTO destinationDTO) {
-		System.out.println("gde si");
 		Destination destination;
 //		if (!this.validateDestinationDTO(DestinationDTO)) {
 //			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -10,6 +10,11 @@ table {
     color: green;
 }
 
+.mat-button.mat-basic,
+.mat-stroked-button.mat-basic {
+    color: lightgrey;
+}
+
 .mat-button.mat-success,
 .mat-stroked-button.mat-success {
     color: #155724;

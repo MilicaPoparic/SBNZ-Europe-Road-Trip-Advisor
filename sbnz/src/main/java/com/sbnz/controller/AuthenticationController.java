@@ -71,7 +71,7 @@ public class AuthenticationController {
 	@RequestMapping(value = "/log-in", method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody UserLoginDTO authenticationRequest,
 			HttpServletResponse response) {
-
+		
 		try {
 			Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
 					authenticationRequest.getUsername(), authenticationRequest.getPassword()));
@@ -108,6 +108,7 @@ public class AuthenticationController {
 	// @Transactional
 	public ResponseEntity<?> addUser(@RequestBody RegisteredUserDTO registeredUserDTO, HttpServletRequest request)
 			throws Exception {
+		System.out.println(request.getContextPath()+"UEIFAHWIEUI");
 		RegisteredUser registeredUser;
 
 		System.out.println(registeredUserDTO);

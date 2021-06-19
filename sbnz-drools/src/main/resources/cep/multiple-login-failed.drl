@@ -1,27 +1,21 @@
 package cep
 
 import com.sbnz.dto.LoginEventDTO;
+import com.sbnz.event.MultipleLoginFailedEvent;
 
-declare MultipleLoginFailedEvent
-    @role(event)
-    @expires(10m)
-    username: String
-    reason: String
-end;
-
-rule "10 or more login attempts in 2 minutes with same username"
+rule "3 or more login attempts in 10 minutes with same username"
 	agenda-group "login"
     when
         $u1: LoginEventDTO($username: username)
-        Number(intValue >= 10) from accumulate(
+        Number(intValue >= 3) from accumulate(
             $u2: LoginEventDTO(
                 this != $u1, 
                 username == $username
-            ) over window:time( 2m ),
+            ) over window:time( 10m ),
             count($u2)
         )
-        not (MultipleLoginFailedEvent(username == $username, reason == "Multiple failed login attempts"))
+       not (MultipleLoginFailedEvent(username == $username))
     then
-        insert(new MultipleLoginFailedEvent($username, "Multiple failed login attempts"));
+        insert(new MultipleLoginFailedEvent("natasamirkov43@gmail.com", "Multiple failed login attempts"));
         System.out.println("Multiple failed login attempts with username: " + $username);
 end

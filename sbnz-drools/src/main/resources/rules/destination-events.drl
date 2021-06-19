@@ -325,4 +325,43 @@ query "Get trending destination" (Boolean $trending)
 	$destinations: Destination(trending == $trending)
 end
 
+query "Get destinations with children discount" (Boolean $children) 
+	$destinations: Destination($hotels: hotels)
+	Number(intValue >= 1) from accumulate(
+            $h: Hotel(childrenDiscount == true) from $hotels,
+            count($h)
+        )
+end
+
+query "Get destinations with selected category" (String category) 
+	$destinations: Destination($categories: categories)
+	Number(intValue >= 1) from accumulate(
+            $c: Category(name == category) from $categories,
+            count($c)
+        )
+end
+
+query "Get destination with selected transportation type" (Transportation $transport)
+	$destinations: Destination(transportation contains $transport)
+end
+
+query "Get mediterranean destinations" ()
+	$destinations: Destination(locationLat > 31.0, locationLat < 45.0, locationLon > -6.0, locationLon < 36.0)
+end
+
+query "Get balkan destinations" ()
+	$destinations: Destination(locationLat > 35.0, locationLat < 50.0, locationLon > 15.0, locationLon < 30.0)
+end
+
+query "Get eastern europe destinations" ()
+	$destinations: Destination(locationLat > 45.0, locationLat < 65.0, locationLon > 27.0)
+end
+
+query "Get north europe destinations" ()
+	$destinations: Destination(locationLat > 50.0, locationLat < 70.0, locationLon > -10.0, locationLon < 40.0)
+end
+
+
+
+
 

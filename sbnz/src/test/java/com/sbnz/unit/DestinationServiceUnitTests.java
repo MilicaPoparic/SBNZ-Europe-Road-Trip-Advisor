@@ -611,4 +611,6 @@ public class DestinationServiceUnitTests {
 		assertEquals(Double.valueOf(0.0), destinations.get(4).getScore());
 		kieSession.dispose();
 	}
+	
+	
 }
