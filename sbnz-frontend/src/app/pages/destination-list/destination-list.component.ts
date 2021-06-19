@@ -41,7 +41,9 @@ export class DestinationListComponent implements OnInit {
   }
 
   addDestination() {
-    const dialogRef = this.dialog.open(AddDestinationComponent);
+    const dialogRef = this.dialog.open(AddDestinationComponent, {
+      backdropClass: 'backdropBackground'
+    });
     dialogRef.afterClosed().subscribe(result => {
       this.dataSource.push(result.data);
       window.location.reload();

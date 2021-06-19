@@ -1,3 +1,6 @@
+
+<div class="maindiv">
+
 <form class="reactiveForm" [formGroup]="form" class="form">
     <div class="example-container">
         <mat-form-field appearance="fill">
@@ -7,6 +10,7 @@
         <br>
         <geoapify-geocoder-autocomplete (placeSelect)="placeSelected($event)">
         </geoapify-geocoder-autocomplete>
+        <br>
         <mat-form-field appearance="fill">
             <mat-label>Categories</mat-label>
             <mat-select (valueChange)="onSelectionCategory($event)" multiple>
@@ -33,7 +37,7 @@
             <mat-label>Images</mat-label>
             <input matInput formControlName="images">
         </mat-form-field>
-        <button mat-button (click)="addImage()">Add</button>
+        <button mat-raised-button (click)="addImage()">New image</button>
 
         <br>
         <br>
@@ -45,3 +49,4 @@
         </mat-dialog-actions>
     </div>
 </form>
+</div>
