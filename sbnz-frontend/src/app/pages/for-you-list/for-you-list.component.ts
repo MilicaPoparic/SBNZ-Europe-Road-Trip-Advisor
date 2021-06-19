@@ -4,26 +4,25 @@ import { ToastrService } from 'ngx-toastr';
 import { Destination } from 'src/app/core/model/Destination';
 import { DestinationService } from 'src/app/core/services/destination/destination.service';
 import { PersonalizeSearchComponent } from '../personalize-search/personalize-search.component';
-
 @Component({
   selector: 'app-for-you-list',
   templateUrl: './for-you-list.component.html',
   styleUrls: ['./for-you-list.component.scss']
 })
 export class ForYouListComponent implements OnInit {
-
+  loading = true;
   destinations!: Destination[];
-  
+
 
   constructor(private destinationService: DestinationService,
-              private toastr: ToastrService,
-              public dialog: MatDialog) {
+    private toastr: ToastrService,
+    public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
-    this.destinations  = [];
+    this.destinations = [];
     this.destinationService.getDestination().subscribe(
-            res => {
+      res => {
         this.destinations = res.body as Destination[];
 
         let bestScore = this.destinations[0].score;
@@ -33,15 +32,16 @@ export class ForYouListComponent implements OnInit {
         this.destinations.forEach(element => {
           let imagess = element.images as string[];
           element.image = imagess[0];
-          if(element.score == bestScore) {
+          if (element.score == bestScore) {
             element.gold = true;
-          } 
-          if(!element.gold && element.score! >= silverScore){
+          }
+          if (!element.gold && element.score! >= silverScore) {
             silverScore = element.score!;
             element.silver = true;
           }
 
           console.log(silverScore);
+          this.loading = false;
         });
       }, error => {
         console.log(error.error);
@@ -50,28 +50,28 @@ export class ForYouListComponent implements OnInit {
 
   }
 
-  onButtonClicked(){
+  onButtonClicked() {
     const dialogRef = this.dialog.open(PersonalizeSearchComponent);
     dialogRef.afterClosed().subscribe(result => {
       this.destinations = result.data;
       let bestScore = this.destinations[0].score;
-        console.log(bestScore);
-        var silverScore = 0;
+      console.log(bestScore);
+      var silverScore = 0;
 
-        this.destinations.forEach(element => {
-          let imagess = element.images as string[];
-          element.image = imagess[0];
-          if(element.score == bestScore) {
-            element.gold = true;
-          } 
-          if(!element.gold && element.score! >= silverScore){
-            silverScore = element.score!;
-            element.silver = true;
-          }
+      this.destinations.forEach(element => {
+        let imagess = element.images as string[];
+        element.image = imagess[0];
+        if (element.score == bestScore) {
+          element.gold = true;
+        }
+        if (!element.gold && element.score! >= silverScore) {
+          silverScore = element.score!;
+          element.silver = true;
+        }
 
 
-        });
-        console.log(silverScore);
+      });
+      console.log(silverScore);
 
     });
   }

@@ -1,4 +1,5 @@
-<form class="reactiveForm" [formGroup]="form" class="form">
+<mat-spinner *ngIf="loading"></mat-spinner>
+<form class="reactiveForm" [formGroup]="form" class="form" *ngIf="!loading">
     <div class="example-container">
         <mat-form-field appearance="fill">
             <mat-label>Local food</mat-label>

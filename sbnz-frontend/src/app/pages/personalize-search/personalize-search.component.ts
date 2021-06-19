@@ -21,6 +21,7 @@ export class PersonalizeSearchComponent implements OnInit {
   budgetArray = ["low", "medium", "high"];
   accommodationArray = [1, 2, 3, 4, 5];
   todayDate!: Date;
+  loading = false;
 
 
 
@@ -50,6 +51,7 @@ export class PersonalizeSearchComponent implements OnInit {
   )};
 
   submit(){
+    this.loading = true;
     this.searchParams = this.form.value as SearchParams;
     if(!this.form.value['maxDistance']){
       this.searchParams.maxDistance = 0;
@@ -58,6 +60,7 @@ export class PersonalizeSearchComponent implements OnInit {
     this.destinationService.getDestinationBySearchParams(this.searchParams as SearchParams).subscribe(
       result => {
         this.form.reset();
+        this.loading = false;
         this.dialogRef.close({data: result as Destination[]});
       },
       error => {

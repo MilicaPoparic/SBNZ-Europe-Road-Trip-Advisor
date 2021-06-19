@@ -1,8 +1,8 @@
 <div>
   <!-- <button mat-button (click)="onButtonClicked()">Plan your next trip!</button> -->
   <button class="style-1" (click)="onButtonClicked()">Plan your next trip! ⚡</button>
-
-  <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
+  <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
+  <div *ngIf="!loading" id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
     <div class="controls-top">
       <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
       <a class="btn-floating" href="#multi-item-example" data-slide="next"><i class="fas fa-chevron-right"></i></a>

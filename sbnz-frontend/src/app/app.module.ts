@@ -15,10 +15,11 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ForYouListComponent } from './pages/for-you-list/for-you-list.component';
 import { PersonalizeSearchComponent } from './pages/personalize-search/personalize-search.component';
 import { GeoapifyGeocoderAutocompleteModule } from '@geoapify/angular-geocoder-autocomplete';
-import { ProfilePageComponent } from './pages/profile-page/profile-page.component';import { ImageSliderComponent } from './pages/destination/image-slider/image-slider.component';
+import { ProfilePageComponent } from './pages/profile-page/profile-page.component'; import { ImageSliderComponent } from './pages/destination/image-slider/image-slider.component';
 import { DestitnationDetailsComponent } from './pages/destination/destination-details/destination-details.component';
 import { DestinationListComponent } from './pages/destination-list/destination-list.component';
-import { AddDestinationComponent } from './pages/destination/add-destination/add-destination.component';import { AddHotelComponent } from './pages/add-hotel/add-hotel.component';@NgModule({
+import { AddDestinationComponent } from './pages/destination/add-destination/add-destination.component'; import { AddHotelComponent } from './pages/add-hotel/add-hotel.component';
+@NgModule({
   declarations: [
     AppComponent,
     NavbarNonAuthComponent,
@@ -26,19 +27,20 @@ import { AddDestinationComponent } from './pages/destination/add-destination/add
     ForYouListComponent,
     PersonalizeSearchComponent,
     ProfilePageComponent,
-	DestitnationDetailsComponent,
+    DestitnationDetailsComponent,
     ImageSliderComponent,
     DestinationListComponent,
-	AddHotelComponent,    AddDestinationComponent  ],  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    AuthModule,
-    MaterialModule,
-    ToastrModule.forRoot(),
-    GeoapifyGeocoderAutocompleteModule.withConfig('d7bf4986e27749f4b974b51be1ea926d'),
-  ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true}],
+    AddHotelComponent, AddDestinationComponent], 
+    imports: [
+      BrowserModule,
+      AppRoutingModule,
+      AuthModule,
+      MaterialModule,
+      ToastrModule.forRoot(),
+      GeoapifyGeocoderAutocompleteModule.withConfig('d7bf4986e27749f4b974b51be1ea926d'),
+    ],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: Interceptor, multi: true }],
   bootstrap: [AppComponent],
-  schemas:[NO_ERRORS_SCHEMA]
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

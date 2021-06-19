@@ -28,6 +28,9 @@ img{
 
 .h2 { color: #1a0a0a; font-size:15px;  font-family: 'Helvetica Neue', sans-serif; font-style: italic; font-weight: normal; letter-spacing: normal; text-transform: none; }
 
+.spinner {
+  vertical-align:middle;
+}
 button {
     font-weight: 60;
     border: solid $border-width $color;
@@ -69,4 +72,3 @@ button {
       }
     }
   }
-
