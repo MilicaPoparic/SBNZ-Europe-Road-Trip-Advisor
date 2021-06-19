@@ -5,6 +5,7 @@ import com.sbnz.event.MultipleLoginFailedEvent;
 
 rule "3 or more login attempts in 10 minutes with same username"
 	agenda-group "login"
+	no-loop true
     when
         $u1: LoginEventDTO($username: username)
         Number(intValue >= 3) from accumulate(
@@ -16,6 +17,6 @@ rule "3 or more login attempts in 10 minutes with same username"
         )
        not (MultipleLoginFailedEvent(username == $username))
     then
-        insert(new MultipleLoginFailedEvent("natasamirkov43@gmail.com", "Multiple failed login attempts"));
+        insert(new MultipleLoginFailedEvent($username, "Multiple failed login attempts"));
         System.out.println("Multiple failed login attempts with username: " + $username);
 end

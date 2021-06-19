@@ -1,18 +1,7 @@
 <div>
     <app-image-slider [destination]="destination" [imageDTO]="images"></app-image-slider>
     <br>
-    <div class="center">
-        <span *ngIf="destination?.trending" >
-            Trending: <i class="material-icons">
-                whatshot
-            </i>
-        </span>
-        <div class="edit">
-            <p>Rating: <span id="averageRate">{{destination?.score | number:'1.0-2'}}</span></p>
-        </div>
-        <br>
-        <br>
-    </div>
+
     <div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
         <div class="controls-top">
             <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>

@@ -1,4 +1,4 @@
-$color: black;
+$color: pink;
 $color2: pink;
 $radius: .35rem;
 $border-width: 2px;
@@ -30,12 +30,13 @@ img{
 
 .spinner {
   vertical-align:middle;
+  margin: auto;
 }
 button {
     font-weight: 60;
     border: solid $border-width $color;
     outline: 0;
-    margin-left: 20px;
+    margin: 20px;
     padding: 20px;
     font-size: 20px;
     letter-spacing: .08rem;

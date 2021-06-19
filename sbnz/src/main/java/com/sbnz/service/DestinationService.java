@@ -74,7 +74,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 
 	@Override
 	public Destination findOne(Long id) {
-		System.out.println("usli smo u metodu");
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 		String username = currentUser.getName();
 		Destination destination = destinationRepository.findByIdAndActive(id, true).orElse(null);
@@ -178,7 +177,6 @@ public class DestinationService implements ServiceInterface<Destination> {
 	}
 
 	public ArrayList<Destination> reportForChildrenDiscount() {
-		System.out.println("servis macko");
 		List<Destination> allDestinations = findAll();
 		KieSession kieSession = kieContainer.newKieSession("test-session");
 		allDestinations.forEach(kieSession::insert);

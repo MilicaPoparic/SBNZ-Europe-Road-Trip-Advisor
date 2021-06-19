@@ -106,7 +106,7 @@ rule "Add points to destinations with low budget"
     
     	$distance: Double() from Utility.distance($lat1, $lon1, $userLat, $userLon)
     	$estimatedBudget: Double() from Utility.multiply($distance, $transport, $numberOfPeople)
-    	eval($estimatedBudget < 2500)
+    	eval($estimatedBudget < 1000)
     then
 		modify($destination) {
 			setScore($destination.getScore() + 10);	

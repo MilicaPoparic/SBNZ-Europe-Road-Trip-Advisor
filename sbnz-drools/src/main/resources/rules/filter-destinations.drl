@@ -37,7 +37,7 @@ rule "Add points to destinations for younger population"
         $user: RegisteredUser(Utility.getYears(dateOfBirth) < 30)
         $destination: Destination($categories: categories)
         Number($value: intValue >= 1) from accumulate(
-        	Category($n: name, $n == "shopping" || $n == "night life" || $n == "city"  || $n == "adventure" || $n == "concerts" ) from $categories,
+        	Category($n: name,  ["shopping", "night life", "city", "adventure", "concerts"] contains $n ) from $categories,
         	count($n)
         )
     then
@@ -55,7 +55,7 @@ rule "Add points to destinations for older population"
         $user: RegisteredUser(Utility.getYears(dateOfBirth) > 50)
         $destination: Destination($categories: categories)
         Number($value: intValue >= 1) from accumulate(
-        	Category($n: name, $n == "museums" || $n == "history" || $n == "city"  || $n == "mountains" || $n == "spa" ) from $categories,
+        	Category($n: name, ["museums", "history", "city", "mountains", "spa"] contains $n) from $categories,
         	count($n)
         )
     then

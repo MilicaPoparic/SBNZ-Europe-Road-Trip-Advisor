@@ -53,7 +53,6 @@ public class DestinationServiceUnitTests {
 	ArrayList<Destination> destinations;
 	ArrayList<DestinationEventsDTO> destinationEvents;
 
-	@SuppressWarnings("deprecation")
 	@Before
 	public void setup() {
 		KieServices kieServices = KieServices.Factory.get();
@@ -334,7 +333,7 @@ public class DestinationServiceUnitTests {
 	}
 
 	@Test
-	public void testAddScoreBasedOnTransportation() {
+	public void testAddScoreBasedOnTransportationCar() {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setTransportation(Transportation.car);
 		searchParams.setMaxDistance(340);
@@ -351,9 +350,121 @@ public class DestinationServiceUnitTests {
 
 		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
 
-		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+		assertEquals(Double.valueOf(2.0), destinations.get(1).getScore());
 
 		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnTransportationPlane() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setTransportation(Transportation.plane);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(transportation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnTransportationTrain() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setTransportation(Transportation.train);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(transportation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(2.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnTransportationShip() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setTransportation(Transportation.ship);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(transportation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(2.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnTransportationBus() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setTransportation(Transportation.bus);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(transportation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(2.0), destinations.get(2).getScore());
 
 		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
 
@@ -387,9 +498,36 @@ public class DestinationServiceUnitTests {
 		assertEquals(Double.valueOf(15.0), destinations.get(4).getScore());
 		kieSession.dispose();
 	}
-
+	
 	@Test
-	public void testAddScoreBasedOnAccommodation() {
+	public void testAddScoreBasedOnChildrenNotChecked() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setChildren(false);
+		searchParams.setMaxDistance(340);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(children_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(0.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnAccommodation1() {
 		SearchDTO searchParams = new SearchDTO();
 		searchParams.setAccommodation(4);
 		searchParams.setMaxDistance(340);
@@ -411,6 +549,118 @@ public class DestinationServiceUnitTests {
 		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
 
 		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnAccommodation2() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(4);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(accommodation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnAccommodation3() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(4);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(accommodation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+
+	@Test
+	public void testAddScoreBasedOnAccommodatio4() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(4);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(accommodation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnAccommodation5() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setAccommodation(5);
+		searchParams.setMaxDistance(340);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(accommodation_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(10.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(10.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(0.0), destinations.get(3).getScore());
 
 		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
 		kieSession.dispose();
@@ -440,6 +690,33 @@ public class DestinationServiceUnitTests {
 		assertEquals(Double.valueOf(0.0), destinations.get(3).getScore());
 
 		assertEquals(Double.valueOf(0.0), destinations.get(4).getScore());
+		kieSession.dispose();
+	}
+	
+	@Test
+	public void testAddScoreBasedOnLongerDistance() {
+		SearchDTO searchParams = new SearchDTO();
+		searchParams.setMaxDistance(3000);
+		searchParams.setChildren(true);
+
+		KieSession kieSession = kieContainer.newKieSession("test-session");
+		kieSession.getAgenda().getAgendaGroup(distance_agenda).setFocus();
+
+		kieSession.insert(ru);
+		kieSession.insert(searchParams);
+		destinations.forEach(kieSession::insert);
+
+		kieSession.fireAllRules();
+
+		assertEquals(Double.valueOf(5.0), destinations.get(0).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(1).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(2).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(3).getScore());
+
+		assertEquals(Double.valueOf(5.0), destinations.get(4).getScore());
 		kieSession.dispose();
 	}
 

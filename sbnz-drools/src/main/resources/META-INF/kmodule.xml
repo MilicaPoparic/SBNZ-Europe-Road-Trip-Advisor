@@ -4,11 +4,9 @@
         <ksession name="test-session"/>
     </kbase>
     <kbase name="cepKbase" eventProcessingMode="stream" packages="cep">
-        <ksession name="cepKsession"/>
+        <ksession name="cepKsession" clockType="realtime"/>
+        <ksession name="cepKsessionPseudo" clockType="pseudo"/>
     </kbase>
     
-    <kbase name="cepConfigKbase" eventProcessingMode="stream" packages="cep">
-        <ksession name="cepConfigKsessionPseudoClock" clockType="pseudo"/>
-        <ksession name="cepConfigKsessionRealtimeClock" clockType="realtime"/>
-    </kbase>
+
 </kmodule>

@@ -1,7 +1,6 @@
 <div>
-  <!-- <button mat-button (click)="onButtonClicked()">Plan your next trip!</button> -->
   <button class="style-1" (click)="onButtonClicked()">Plan your next trip! ⚡</button>
-  <mat-spinner class="spinner" *ngIf="loading"></mat-spinner>
+  <mat-spinner class="spinner" color="accent" *ngIf="loading"></mat-spinner>
   <div *ngIf="!loading" id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">
     <div class="controls-top">
       <a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>
@@ -18,7 +17,12 @@
             <img class="card-img-top" [src]="i.image" alt="Card image cap">
             <div class="card-body">
               <span>
-              <span class="card-title h4">{{i.name}}</span>
+              <span class="card-title h4">{{i.name}}</span> 
+              <span *ngIf="i.trending" >
+                <i class="material-icons">
+                    whatshot
+                </i>
+            </span>
               <a id="goToPage{{i.id}}" class="open_in_new" mat-button href="/destination/{{i.id}}"
                 matTooltip="Open to see details" inline="true">
                 <mat-icon>open_in_new</mat-icon>

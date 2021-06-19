@@ -6,7 +6,7 @@ values ('admin', true, 'admin@gmail.com', 'Admin', 'Admin', '2020-02-08 23:40:37
 
 
 insert into users (type, active, email, first_name, last_name, last_password_reset_date, password, verified, date_of_birth, location_lat, location_lon, profession)
-values ('registered_user', true, 'jana@gmail.com', 'Jana', 'Mara', '2020-02-08 23:40:37', '$2a$10$RVzuprKddsjdq6P8QWmqF.sCj2uYPIUlbFVB.b7tJ9RdFNOOBNoXO', true, '1995-02-08 23:40:37' , 44.25, 21.56, 'employed');
+values ('registered_user', true, 'milicapoparic@gmail.com', 'Jana', 'Mara', '2020-02-08 23:40:37', '$2a$10$RVzuprKddsjdq6P8QWmqF.sCj2uYPIUlbFVB.b7tJ9RdFNOOBNoXO', true, '1995-02-08 23:40:37' , 44.25, 21.56, 'employed');
 insert into users (type, active, email, first_name, last_name, last_password_reset_date, password, verified, date_of_birth, location_lat, location_lon, profession)
 values ('registered_user', true, 'nedicteodora1@gmail.com', 'Teodora', 'Nedic', '2020-02-08 23:40:37', '$2a$10$RVzuprKddsjdq6P8QWmqF.sCj2uYPIUlbFVB.b7tJ9RdFNOOBNoXO', true, '1998-06-01 23:40:37' , 44.25, 21.56, 'employed');
 insert into users (type, active, email, first_name, last_name, last_password_reset_date, password, verified, date_of_birth, location_lat, location_lon, profession)
@@ -272,16 +272,16 @@ insert into hotel (name, stars, active, destination_id, children_discount) value
 insert into hotel (name, stars, active, destination_id, children_discount) values ('Alexanderplatz', 3, true, 15, true);
 
 ---- USER INTERESTS
-insert into users_interests (registered_user_id, interests_id) values (1, 1);
-insert into users_interests (registered_user_id, interests_id) values (1, 2);
-insert into users_interests (registered_user_id, interests_id) values (1, 3);
-insert into users_interests (registered_user_id, interests_id) values (1, 11);
-insert into users_interests (registered_user_id, interests_id) values (1, 13);
-
 insert into users_interests (registered_user_id, interests_id) values (2, 1);
-insert into users_interests (registered_user_id, interests_id) values (2, 7);
-insert into users_interests (registered_user_id, interests_id) values (2, 12);
+insert into users_interests (registered_user_id, interests_id) values (2, 2);
+insert into users_interests (registered_user_id, interests_id) values (2, 3);
+insert into users_interests (registered_user_id, interests_id) values (2, 11);
+insert into users_interests (registered_user_id, interests_id) values (2, 13);
 
-insert into users_interests (registered_user_id, interests_id) values (3, 3);
+insert into users_interests (registered_user_id, interests_id) values (3, 1);
 insert into users_interests (registered_user_id, interests_id) values (3, 7);
-insert into users_interests (registered_user_id, interests_id) values (3, 9);
+insert into users_interests (registered_user_id, interests_id) values (3, 12);
+
+insert into users_interests (registered_user_id, interests_id) values (4, 3);
+insert into users_interests (registered_user_id, interests_id) values (4, 7);
+insert into users_interests (registered_user_id, interests_id) values (4, 9);
